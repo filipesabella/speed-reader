@@ -8,9 +8,10 @@ const DEFAULT_SPEED = 400;
   if (!text.trim()) return;
 
   const words = textToWords(text);
+  const renderer = new Renderer(words);
 
-  let interval = 0;
-  let speedInWPM = 0;
+  let speedInWPM = DEFAULT_SPEED;
+  let interval = 60 * 1000 / DEFAULT_SPEED;
   let paused = false;
 
   const changeSpeed = (delta: number) => {
@@ -18,28 +19,29 @@ const DEFAULT_SPEED = 400;
     speedInWPM = Math.max(50, speedInWPM);
 
     interval = 60 * 1000 / speedInWPM;
+
+    renderer.render(words.current(), speedInWPM, interval);
   }
-  changeSpeed(DEFAULT_SPEED);
+
+  const navigateWord = () => {
+    renderer.render(words.current(), speedInWPM, interval);
+  }
 
   const togglePause = (pause?: boolean) => {
     paused = pause !== undefined ? pause : !paused;
+
+    !paused && loop();
   }
 
-  const renderer = new Renderer(words);
-  renderer.initialize(togglePause, changeSpeed);
+  renderer.initialize(togglePause, changeSpeed, navigateWord);
 
   const loop = () => {
-    if (words.ended()) return;
+    if (words.ended() || paused) return;
 
-    if (paused) {
-      renderer.render(words.current(), speedInWPM, interval);
-      window.setTimeout(loop, 1);
-    } else {
-      const nextWord = words.next();
-      renderer.render(nextWord, speedInWPM, interval);
+    const nextWord = words.next();
+    renderer.render(nextWord, speedInWPM, interval);
 
-      window.setTimeout(loop, timeoutForWord(interval, nextWord));
-    }
+    window.setTimeout(loop, timeoutForWord(interval, nextWord));
   };
 
   window.setTimeout(loop, interval);

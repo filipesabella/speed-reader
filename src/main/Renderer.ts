@@ -8,7 +8,8 @@ export class Renderer {
 
   public initialize(
     togglePause: (pause?: boolean) => void,
-    changeSpeed: (delta: number) => void): void {
+    changeSpeed: (delta: number) => void,
+    navigateWord: () => void): void {
     this.removeUI();
 
     const style = document.createElement('style');
@@ -26,6 +27,7 @@ export class Renderer {
     this.bindEvents(
       togglePause,
       changeSpeed,
+      navigateWord,
       document
         .querySelector('#speed-reader-container .speed-reader-speed-minus'),
       document
@@ -42,6 +44,7 @@ export class Renderer {
   private bindEvents(
     togglePause: (pause?: boolean) => void,
     changeSpeed: (delta: number) => void,
+    navigateWord: () => void,
     speedMinusButton: HTMLDivElement,
     speedPlusButton: HTMLDivElement) {
     this.container.addEventListener('click', (e: MouseEvent) => {
@@ -55,8 +58,14 @@ export class Renderer {
         'Space': togglePause,
       },
       'down': {
-        'ArrowLeft': () => this.renderWord(this.words.previous()),
-        'ArrowRight': () => this.renderWord(this.words.next()),
+        'ArrowLeft': () => {
+          this.words.previous();
+          navigateWord();
+        },
+        'ArrowRight': () => {
+          this.words.next();
+          navigateWord();
+        },
         'ArrowUp': () => changeSpeed(50),
         'ArrowDown': () => changeSpeed(-50),
       },

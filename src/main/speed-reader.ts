@@ -26,7 +26,7 @@ const DEFAULT_SPEED = 400;
   }
 
   const renderer = new Renderer(words);
-  renderer.initialise(togglePause, changeSpeed);
+  renderer.initialize(togglePause, changeSpeed);
 
   const loop = () => {
     if (words.ended()) return;

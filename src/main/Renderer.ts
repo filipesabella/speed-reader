@@ -10,7 +10,7 @@ export class Renderer {
     this.words = words;
   }
 
-  public initialise(
+  public initialize(
     togglePause: (pause?: boolean) => void,
     changeSpeed: (delta: number) => void): void {
     this.removeUI();
@@ -35,7 +35,6 @@ export class Renderer {
       document
         .querySelector('#speed-reader-container .speed-reader-speed-plus'));
   }
-
 
   public render(word: string, wpm: number, interval: number): void {
     const time = this.renderTime(interval);

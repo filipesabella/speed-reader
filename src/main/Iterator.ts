@@ -1,9 +1,7 @@
 export class Iterator<T> {
-  array: T[];
-  index: number;
+  private index: number;
 
-  constructor(array: T[]) {
-    this.array = array;
+  constructor(private readonly array: T[]) {
     this.index = -1;
   }
 

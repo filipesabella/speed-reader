@@ -1,8 +1,7 @@
 import { Iterator } from "./Iterator";
 
 export function textToWords(text: string): Iterator<string> {
-  return new Iterator(text
-    .split('\n')
+  return new Iterator(text.split('\n')
     // all this to keep \n at the end of sentences to give a longer pause
     // after them.
     .reduce((acc, line) => {
@@ -12,7 +11,6 @@ export function textToWords(text: string): Iterator<string> {
       words[words.length - 1] += '\n';
       return [...acc, ...words];
     }, [] as string[]));
-
 }
 
 export function remainingTime(interval: number, words: Iterator<string>)

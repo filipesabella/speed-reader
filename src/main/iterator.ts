@@ -7,6 +7,10 @@ export class Iterator<T> {
     this.index = -1;
   }
 
+  public current(): T {
+    return this.array[this.index];
+  }
+
   public previous(): T {
     this.index = Math.max(0, this.index - 1);
     return this.array[this.index];

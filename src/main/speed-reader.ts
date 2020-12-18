@@ -32,7 +32,7 @@ const DEFAULT_SPEED = 400;
     if (words.ended()) return;
 
     if (paused) {
-      renderer.renderPaused(speedInWPM, interval);
+      renderer.render(words.current(), speedInWPM, interval);
       window.setTimeout(loop, 1);
       return;
     };

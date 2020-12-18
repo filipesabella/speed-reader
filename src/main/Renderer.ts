@@ -1,23 +1,10 @@
 import { Iterator } from './iterator';
 import { remainingTime } from './words';
 
-const BG_COLOR = 'hsl(0, 0%, 15%)';
-const TEXT_COLOR = 'hsl(0, 0%, 90%)';
-const MIDDLE_LETTER_COLOR = 'hsl(25, 50%, 50%)';
-const FONT_FAMILY = 'monospace';
-const FONT_SIZE = '30px';
-
 export class Renderer {
   words: Iterator<string>;
 
   container: HTMLDivElement;
-  wordStart: HTMLDivElement;
-  wordMiddle: HTMLDivElement;
-  wordEnd: HTMLDivElement;
-  timeContainer: HTMLDivElement;
-  speedCurrent: HTMLDivElement;
-  speedMinus: HTMLDivElement;
-  speedPlus: HTMLDivElement;
 
   constructor(words: Iterator<string>) {
     this.words = words;
@@ -29,35 +16,39 @@ export class Renderer {
     this.removeUI();
 
     const style = document.createElement('style');
-    style.textContent = require('./styles.css');
+    style.textContent = styles;
     document.head.append(style);
 
-    document.body.innerHTML += require('./template.xhtml');
+    document.body.innerHTML += `
+      <div id="speed-reader-container">
+        ${template('', '', '', 0, '')}
+      </div>
+    `;
 
-    this.container = findElement('');
-    this.container.style.fontFamily = FONT_FAMILY;
-    this.container.style.fontSize = FONT_SIZE;
-    this.container.style.color = TEXT_COLOR;
+    this.container = document.querySelector('#speed-reader-container');
 
-    this.wordMiddle = findElement('.speed-reader-word-middle');
-    this.wordMiddle.style.color = MIDDLE_LETTER_COLOR;
+    this.bindEvents(
+      togglePause,
+      changeSpeed,
+      document
+        .querySelector('#speed-reader-container .speed-reader-speed-minus'),
+      document
+        .querySelector('#speed-reader-container .speed-reader-speed-plus'));
+  }
 
-    findElement('.speed-reader-wrapper').style.backgroundColor = BG_COLOR;
 
-    this.wordStart = findElement('.speed-reader-word-start');
-    this.wordEnd = findElement('.speed-reader-word-end');
-    this.timeContainer = findElement('.speed-reader-time');
+  public render(word: string, wpm: number, interval: number): void {
+    const time = this.renderTime(interval);
+    const [start, middle, end] = this.renderWord(word);
 
-    this.speedMinus = findElement('.speed-reader-speed-minus');
-    this.speedPlus = findElement('.speed-reader-speed-plus');
-    this.speedCurrent = findElement('.speed-reader-speed-current');
-
-    this.bindEvents(togglePause, changeSpeed);
+    this.container.innerHTML = template(start, middle, end, wpm, time);
   }
 
   private bindEvents(
     togglePause: (pause?: boolean) => void,
-    changeSpeed: (delta: number) => void) {
+    changeSpeed: (delta: number) => void,
+    speedMinusButton: HTMLDivElement,
+    speedPlusButton: HTMLDivElement) {
     this.container.addEventListener('click', (e: MouseEvent) => {
       if ((e.target as HTMLDivElement).id === 'speed-reader-container') {
         stopAndHide();
@@ -96,8 +87,8 @@ export class Renderer {
     document.addEventListener('keydown', onkeydown);
     document.addEventListener('keyup', onkeyup);
 
-    this.speedMinus.addEventListener('click', () => changeSpeed(-50));
-    this.speedPlus.addEventListener('click', () => changeSpeed(+50));
+    speedMinusButton.addEventListener('click', () => changeSpeed(-50));
+    speedPlusButton.addEventListener('click', () => changeSpeed(+50));
 
     const stopAndHide = () => {
       togglePause(true);
@@ -109,36 +100,28 @@ export class Renderer {
     };
   }
 
-  public render(word: string, wpm: number, interval: number): void {
-    this.renderPaused(wpm, interval);
-    this.renderWord(word);
-  }
-
-  public renderPaused(wpm: number, interval: number) {
-    this.renderTime(interval);
-    this.speedCurrent.innerHTML = wpm + 'wpm';
-  }
-
-  private renderWord(word: string): void {
+  private renderWord(word: string): [string, string, string] {
     let middleIndex = Math.floor(word.length / 2);
 
     // if the word ends in a punctuation mark, move the middle one character
     // back. it looks better.
     if (!!word.match(/[^a-zA-Z]\n?/)) middleIndex--;
 
-    this.wordStart.innerHTML = word.substring(0, middleIndex);
-    this.wordMiddle.innerHTML = word.charAt(middleIndex);
-    this.wordEnd.innerHTML = word.substr(middleIndex + 1);
+    return [
+      word.substring(0, middleIndex),
+      word.charAt(middleIndex),
+      word.substr(middleIndex + 1),
+    ];
   }
 
-  private renderTime(interval: number): void {
+  private renderTime(interval: number): string {
     const seconds = remainingTime(interval, this.words) / 1000;
 
     const readableTime = Math.floor(seconds / 60)
       + ':'
       + ('0' + Math.ceil(seconds % 60)).slice(-2);
 
-    this.timeContainer.innerHTML = readableTime;
+    return readableTime;
   }
 
   private removeUI(): void {
@@ -146,7 +129,98 @@ export class Renderer {
   }
 }
 
-function findElement(className: string): HTMLDivElement {
-  const selector = `#speed-reader-container ${className}`;
-  return document.querySelector(selector);
+const template = (
+  start: string,
+  middle: string,
+  end: string,
+  wpm: number,
+  time: string,) =>
+  `<div class="speed-reader-wrapper">
+    <div class="speed-reader-word-container">
+      <div class="speed-reader-word-start">${start}</div>
+      <div class="speed-reader-word-middle">${middle}</div>
+      <div class="speed-reader-word-end">${end}</div>
+    </div>
+    <div class="speed-reader-controls">
+    <div class="speed-reader-speed">
+      <span class="speed-reader-speed-minus">-</span>
+      <span class="speed-reader-speed-current">${wpm}</span>
+      <span class="speed-reader-speed-plus">+</span>
+    </div>
+    <div class="speed-reader-time">${time}</div>
+  </div>`;
+
+const styles = `
+#speed-reader-container {
+  --bg-color: hsl(0, 0%, 15%);
+  --text-color: hsl(0, 0%, 90%);
+  --middle-letter-color: hsl(25, 50%, 50%);
+  --font-family: monospace;
+  --font-size: 30px;
 }
+
+#speed-reader-container {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(128, 128, 128, .50);
+
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+}
+
+#speed-reader-container .speed-reader-wrapper {
+  padding: 20px;
+  width: 90%;
+  position: relative;
+  background: var(--bg-color);
+}
+
+#speed-reader-container .speed-reader-word-container {
+  display: flex;
+  margin: 20px 0px;
+}
+
+#speed-reader-container .speed-reader-word-start {
+  flex: 1;
+  text-align: right;
+}
+
+#speed-reader-container .speed-reader-word-end {
+  flex: 1;
+  text-align: left;
+}
+
+#speed-reader-container .speed-reader-word-middle {
+  flex: 0;
+  color: var(--middle-letter-color);
+}
+
+#speed-reader-container .speed-reader-controls {
+  font-size: 12px;
+  display: flex;
+}
+
+#speed-reader-container .speed-reader-speed {
+  flex: 1;
+}
+
+#speed-reader-container .speed-reader-speed-plus,
+#speed-reader-container .speed-reader-speed-minus {
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  width: 15px;
+  text-align: center;
+}
+`;

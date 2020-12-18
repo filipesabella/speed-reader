@@ -1,4 +1,4 @@
-import { Iterator } from "./iterator";
+import { Iterator } from "./Iterator";
 
 export function textToWords(text: string): Iterator<string> {
   return new Iterator(text

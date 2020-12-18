@@ -1,4 +1,4 @@
-import { Iterator } from './iterator';
+import { Iterator } from './Iterator';
 import { remainingTime } from './words';
 
 export class Renderer {

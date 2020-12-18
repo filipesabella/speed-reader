@@ -1,0 +1,21 @@
+{
+  "name": "speed-reader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel test.html"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.14",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-text": "^0.9.7",
+    "typescript": "^4.1.3"
+  },
+  "parcel-plugin-text": {
+    "extentions": [
+      "css",
+      "xhtml"
+    ]
+  }
+}

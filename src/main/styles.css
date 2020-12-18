@@ -1,0 +1,58 @@
+#speed-reader-container {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(128, 128, 128, .50);
+}
+
+#speed-reader-container .speed-reader-wrapper {
+  padding: 20px;
+  width: 90%;
+  position: relative;
+}
+
+#speed-reader-container .speed-reader-word-container {
+  display: flex;
+  margin: 20px 0px;
+}
+
+#speed-reader-container .speed-reader-word-start {
+  flex: 1;
+  text-align: right;
+}
+
+#speed-reader-container .speed-reader-word-end {
+  flex: 1;
+  text-align: left;
+}
+
+#speed-reader-container .speed-reader-word-middle {
+  flex: 0;
+}
+
+#speed-reader-container .speed-reader-controls {
+  font-size: 12px;
+  display: flex;
+}
+
+#speed-reader-container .speed-reader-speed {
+  flex: 1;
+}
+
+#speed-reader-container .speed-reader-speed-plus,
+#speed-reader-container .speed-reader-speed-minus {
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  width: 15px;
+  text-align: center;
+}

@@ -34,13 +34,12 @@ const DEFAULT_SPEED = 400;
     if (paused) {
       renderer.render(words.current(), speedInWPM, interval);
       window.setTimeout(loop, 1);
-      return;
-    };
+    } else {
+      const nextWord = words.next();
+      renderer.render(nextWord, speedInWPM, interval);
 
-    const nextWord = words.next();
-    renderer.render(nextWord, speedInWPM, interval);
-
-    window.setTimeout(loop, timeoutForWord(interval, nextWord));
+      window.setTimeout(loop, timeoutForWord(interval, nextWord));
+    }
   };
 
   window.setTimeout(loop, interval);

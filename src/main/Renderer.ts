@@ -176,7 +176,7 @@ const styles = `
 }
 
 #speed-reader-container .speed-reader-wrapper {
-  padding: 20px;
+  padding: 10px;
   width: 90%;
   position: relative;
   background: var(--bg-color);

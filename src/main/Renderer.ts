@@ -2,13 +2,9 @@ import { Iterator } from './Iterator';
 import { remainingTime } from './words';
 
 export class Renderer {
-  words: Iterator<string>;
+  private container: HTMLDivElement;
 
-  container: HTMLDivElement;
-
-  constructor(words: Iterator<string>) {
-    this.words = words;
-  }
+  constructor(private readonly words: Iterator<string>) { }
 
   public initialize(
     togglePause: (pause?: boolean) => void,

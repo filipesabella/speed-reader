@@ -142,12 +142,13 @@ const template = (
       <div class="speed-reader-word-end">${end}</div>
     </div>
     <div class="speed-reader-controls">
-    <div class="speed-reader-speed">
-      <span class="speed-reader-speed-minus">-</span>
-      <span class="speed-reader-speed-current">${wpm}</span>
-      <span class="speed-reader-speed-plus">+</span>
+      <div class="speed-reader-speed">
+        <span class="speed-reader-speed-minus">-</span>
+        <span class="speed-reader-speed-current">${wpm}</span>
+        <span class="speed-reader-speed-plus">+</span>
+      </div>
+      <div class="speed-reader-time">${time}</div>
     </div>
-    <div class="speed-reader-time">${time}</div>
   </div>`;
 
 const styles = `

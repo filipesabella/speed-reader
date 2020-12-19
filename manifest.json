@@ -2,14 +2,14 @@
   "manifest_version": 2,
   "name": "Speed Reader",
   "version": "1.0",
-  "description": "Speed-read stuff",
+  "description": "Speed-read any texts on the web",
   "content_scripts": [
     {
       "matches": [
         "*://*/*"
       ],
       "js": [
-        "speed-reader.js"
+        "./build/speed-reader.js"
       ]
     }
   ]

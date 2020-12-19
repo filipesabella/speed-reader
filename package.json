@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel src/test/test.html",
-    "test": "mocha src/test/**/*.test.ts -r jsdom-global/register -r ts-node/register"
+    "test": "mocha src/test/**/*.test.ts -r jsdom-global/register -r ts-node/register",
+    "build": "yarn test && rm -rf ./dist && parcel build src/test/test.html && cp dist/speed-reader*.js ./build/speed-reader.js"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",

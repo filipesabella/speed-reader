@@ -18,7 +18,7 @@ export class Renderer {
 
     document.body.innerHTML += `
       <div id="speed-reader-container">
-        ${template('', '', '', 0, '')}
+        ${template('&nbsp;', '', '', 0, '')}
       </div>
     `;
 

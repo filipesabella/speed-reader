@@ -3,7 +3,7 @@ import { textToWords, timeoutForWord } from './words';
 
 const DEFAULT_SPEED = 400;
 
-(window as any).startSpeedReader = () => {
+const startSpeedReader = () => {
   const text = window.getSelection().toString();
   if (!text.trim()) return;
 
@@ -47,4 +47,7 @@ const DEFAULT_SPEED = 400;
   window.setTimeout(loop, interval);
 };
 
-(window as any).startSpeedReader();
+// used in test.html
+(window as any).startSpeedReader = startSpeedReader;
+
+startSpeedReader();

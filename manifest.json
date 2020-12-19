@@ -12,17 +12,12 @@
     "activeTab"
   ],
   "browser_action": {
-    "default_icon": "icons/speed-reader-48.png",
+    "default_icon": "icons/speed-reader-36.png",
     "default_title": "Speed Reader"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "*://*/*"
-      ],
-      "js": [
-        "./build/speed-reader.js"
-      ]
-    }
-  ]
+  "background": {
+    "scripts": [
+      "extension.js"
+    ]
+  }
 }

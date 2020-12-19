@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel src/test/test.html",
     "test": "mocha src/test/**/*.test.ts -r jsdom-global/register -r ts-node/register",
-    "build": "yarn test && rm -rf ./dist && parcel build src/test/test.html && cp dist/speed-reader*.js ./build/speed-reader.js"
+    "build": "yarn test && parcel build src/main/speed-reader.ts --out-file ./build/speed-reader-js --no-source-maps --no-minify && cp dist/speed-reader.js ./build/speed-reader.js"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",

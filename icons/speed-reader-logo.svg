@@ -25,8 +25,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="266.35346"
+     inkscape:zoom="2.0662698"
+     inkscape:cx="396.85039"
      inkscape:cy="781.43744"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -59,13 +59,10 @@
        id="path4561"
        cx="85.939827"
        cy="89.18634"
-       r="10.089425" />
-    <circle
-       style="fill:#ffffff;fill-opacity:1;stroke-width:0.25135416"
-       id="path4561-6"
-       cx="85.939827"
-       cy="89.18634"
-       r="9.5849543" />
+       r="10.089425"
+       inkscape:export-xdpi="120.84"
+       inkscape:export-ydpi="120.84"
+       inkscape:export-filename="/home/filipe/code/speed-reader/icons/speed-reader-96.png" />
   </g>
   <g
      inkscape:label="Layer 1"
@@ -84,42 +81,42 @@
            x="205.06097"
            y="431.57535"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace" /></flowRegion><flowPara
-         id="flowPara3719" /></flowRoot>    <g
-       id="g4599"
-       transform="translate(0.11477925,-0.03671401)">
-      <text
-         id="text3723"
-         y="92.160797"
-         x="77.338699"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-         xml:space="preserve"><tspan
-           style="stroke-width:0.26458332"
-           y="92.160797"
-           x="77.338699"
-           id="tspan3721"
-           sodipodi:role="line">s</tspan></text>
-      <text
-         id="text3727"
-         y="92.144814"
-         x="82.20977"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;fill:#bf6a40;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-         xml:space="preserve"><tspan
-           style="fill:#bf6a40;fill-opacity:1;stroke-width:0.26458332"
-           y="92.144814"
-           x="82.20977"
-           id="tspan3725"
-           sodipodi:role="line">p</tspan></text>
-      <text
-         id="text3731"
-         y="92.140732"
-         x="87.826004"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-         xml:space="preserve"><tspan
-           style="stroke-width:0.26458332"
-           y="92.140732"
-           x="87.826004"
-           id="tspan3729"
-           sodipodi:role="line">d</tspan></text>
-    </g>
+         id="flowPara3719" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.03051567px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;fill:#bf6a2e;fill-opacity:1;stroke:none;stroke-width:0.4507629;"
+       x="80.599937"
+       y="94.10775"
+       id="text3727"
+       inkscape:export-filename="/home/filipe/code/speed-reader/icons/speed-reader-96.png"
+       inkscape:export-xdpi="120.84"
+       inkscape:export-ydpi="120.84"><tspan
+         sodipodi:role="line"
+         id="tspan3725"
+         x="80.599937"
+         y="94.10775"
+         style="fill:#bf6a2e;fill-opacity:1;stroke-width:0.4507629;">s</tspan></text>
+    <circle
+       style="fill:#000000;fill-opacity:1;stroke-width:0.26458332"
+       id="path4561-3"
+       cx="118.82926"
+       cy="89.048782"
+       r="10.089425"
+       inkscape:export-xdpi="60.419998"
+       inkscape:export-ydpi="60.419998"
+       inkscape:export-filename="/home/filipe/code/speed-reader/icons/speed-reader-48.png" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.03051758px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;fill:#fcb582;fill-opacity:1;stroke:none;stroke-width:0.45076293;"
+       x="113.48937"
+       y="93.970192"
+       id="text3727-6"
+       inkscape:export-filename="/home/filipe/code/speed-reader/icons/speed-reader-48.png"
+       inkscape:export-xdpi="60.419998"
+       inkscape:export-ydpi="60.419998"><tspan
+         sodipodi:role="line"
+         id="tspan3725-5"
+         x="113.48937"
+         y="93.970192"
+         style="fill:#fcb582;fill-opacity:1;stroke-width:0.45076293;">s</tspan></text>
   </g>
 </svg>

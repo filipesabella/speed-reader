@@ -3,6 +3,18 @@
   "name": "Speed Reader",
   "version": "1.0",
   "description": "Speed-read any texts on the web",
+  "homepage_url": "https://github.com/filipesabella/speed-reader",
+  "icons": {
+    "48": "icons/speed-reader-48.png",
+    "96": "icons/speed-reader-96.png"
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "browser_action": {
+    "default_icon": "icons/speed-reader-48.png",
+    "default_title": "Speed Reader"
+  },
   "content_scripts": [
     {
       "matches": [

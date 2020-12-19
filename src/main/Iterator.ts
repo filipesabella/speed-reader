@@ -2,6 +2,7 @@ export class Iterator<T> {
   private index: number;
 
   constructor(private readonly array: T[]) {
+    // this isn't good at all, should be zero but I'm lazy
     this.index = -1;
   }
 

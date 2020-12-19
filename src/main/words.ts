@@ -1,4 +1,4 @@
-import { Iterator } from "./Iterator";
+import { Iterator } from './Iterator';
 
 export function textToWords(text: string): Iterator<string> {
   return new Iterator(text.split('\n')
@@ -25,7 +25,7 @@ export function timeoutForWord(interval: number, word: string): number {
   // give it a larger interval on stop chars (., ?, :, \n, etc)
   if (word.match(/\n$/)) {
     intervalMultiplier = 3;
-  } else if (word.match(/[,\.\?\:]$/)) {
+  } else if (word.match(/[,\.\?\!\:]$/)) {
     intervalMultiplier = 2;
   }
 

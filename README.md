@@ -4,6 +4,9 @@ A Firefox extension to help you read faster and more thoroughly.
 
 ![in-action](https://user-images.githubusercontent.com/33415/102681160-f326a880-419d-11eb-862d-785e88e3339e.gif)
 
+You can install it here:
+https://addons.mozilla.org/en-US/firefox/addon/speed-reader/
+
 There are other extensions that do the same, but none for Firefox that doesn't require signing in.
 
 ## Usage

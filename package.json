@@ -10,7 +10,7 @@
     "build-settings": "parcel build src/settings/settings.html --out-dir build/ --out-file settings --public-url ./ --no-source-maps --no-minify",
     "build-main": "parcel build src/main/speed-reader.ts --out-dir build/ --out-file speed-reader.js --no-source-maps --no-minify",
     "build": "yarn test && yarn build-settings && yarn build-main",
-    "package": "zip -r extension.zip build icons extension.js manifest.json"
+    "package": "rm -rf build && yarn build && zip -r extension.zip build icons extension.js manifest.json"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",

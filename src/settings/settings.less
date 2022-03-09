@@ -1,0 +1,44 @@
+#speed-reader-settings {
+  font-family: sans-serif;
+
+  >h1 {
+    margin: 0;
+  }
+
+  >p {
+    font-style: italic;
+  }
+
+  form {
+    display: grid;
+    grid-template-columns: repeat(2, 8em);
+    grid-template-rows: repeat(2, 100%);
+    grid-gap: 1em;
+
+    input:not([type="checkbox"]) {
+      width: 15em;
+    }
+
+    >div {
+      font-size: .7em;
+      white-space: nowrap;
+    }
+  }
+
+
+  .preview {
+    padding: 1em;
+    background-color: var(--bg-color);
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    color: var(--text-color);
+    width: var(--width);
+    height: var(--height);
+    text-align: center;
+    margin-top: 30px;
+
+    .middle {
+      color: var(--middle-letter-color);
+    }
+  }
+}

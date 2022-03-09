@@ -5,8 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel src/test/test.html",
+    "start-settings": "parcel src/settings/settings.html",
     "test": "mocha src/test/**/*.test.ts -r jsdom-global/register -r ts-node/register",
-    "build": "yarn test && parcel build src/main/speed-reader.ts --out-file ./build/speed-reader-js --no-source-maps --no-minify && cp dist/speed-reader.js ./build/speed-reader.js",
+    "build-settings": "parcel build src/settings/settings.html --out-dir build/ --out-file settings --no-source-maps --no-minify",
+    "build": "yarn test && parcel build src/main/speed-reader.ts --out-dir build/ --out-file speed-reader.js --no-source-maps --no-minify",
     "package": "zip -r extension.zip build icons extension.js manifest.json"
   },
   "devDependencies": {
@@ -16,6 +18,7 @@
     "chai": "^4.2.0",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
+    "less": "^4.1.2",
     "mocha": "^8.2.1",
     "parcel-bundler": "^1.12.4",
     "ts-node": "^9.1.1",

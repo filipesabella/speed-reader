@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="settings.less">
+</head>
+
+<body>
+  <div id="speed-reader-settings">
+    <h1>Speed Reader Settings</h1>
+    <p>Saves automatically on any change</p>
+    <form>
+      <label>Font Family</label>
+      <input name="fontFamily"
+             placeholder="Any valid css font expression" />
+      <label>Background color</label>
+      <input name="backgroundColor"
+             placeholder="Any valid css color expression" />
+      <label>Text color</label>
+      <input name="textColor"
+             placeholder="Any valid css color expression" />
+      <label>Middle-letter color</label>
+      <input name="middleLetterColor"
+             placeholder="Any valid css color expression" />
+      <label>Font size</label>
+      <input name="fontSize"
+             placeholder="Any valid css font-size" />
+      <label>Full Screen?</label>
+      <div>
+        <input name="fullScreen" type="checkbox" />
+        <span>Doesn't have a preview, will use the entire available space</span>
+      </div>
+      <label>Width</label>
+      <input name="width" placeholder="Fixed or percentage" />
+      <label>Height</label>
+      <input name="height"
+             placeholder="Fixed or percentage" />
+      <button class="reset">Reset to Defaults</button>
+    </form>
+
+    <div class="preview">
+      He<span class="middle">l</span>lo
+    </div>
+  </div>
+  <script src="settings.ts"></script>
+</body>
+
+</html>

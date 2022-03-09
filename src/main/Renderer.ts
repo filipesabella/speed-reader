@@ -13,26 +13,28 @@ export class Renderer {
     navigateWord: () => void): void {
     this.removeUI();
 
-    const style = document.createElement('style');
-    style.textContent = styles(loadSettingsFromStorage());
-    document.head.append(style);
+    loadSettingsFromStorage().then(settings => {
+      const style = document.createElement('style');
+      style.textContent = styles(settings);
+      document.head.append(style);
 
-    document.body.innerHTML += `
-      <div id="speed-reader-container">
-        ${template('&nbsp;', '', '', 0, '')}
-      </div>
-    `;
+      document.body.innerHTML += `
+        <div id="speed-reader-container">
+          ${template('&nbsp;', '', '', 0, '')}
+        </div>
+      `;
 
-    this.container = document.querySelector('#speed-reader-container');
+      this.container = document.querySelector('#speed-reader-container');
 
-    this.bindEvents(
-      togglePause,
-      changeSpeed,
-      navigateWord,
-      document
-        .querySelector('#speed-reader-container .speed-reader-speed-minus'),
-      document
-        .querySelector('#speed-reader-container .speed-reader-speed-plus'));
+      this.bindEvents(
+        togglePause,
+        changeSpeed,
+        navigateWord,
+        document
+          .querySelector('#speed-reader-container .speed-reader-speed-minus'),
+        document
+          .querySelector('#speed-reader-container .speed-reader-speed-plus'));
+    });
   }
 
   public render(word: string, wpm: number, interval: number): void {
@@ -195,7 +197,9 @@ const styles = (settings: Settings) => `
 
 #speed-reader-container .speed-reader-word-container {
   display: flex;
+  align-items: center;
   margin: 20px 0px;
+  height: ${settings.fullScreen ? '90%' : 'auto'};
 }
 
 #speed-reader-container .speed-reader-word-start {

@@ -6,42 +6,40 @@ import {
 } from "../main/Settings";
 
 (function() {
-
   document.body.onload = () => {
     const container = document
       .querySelector<HTMLDivElement>('#speed-reader-settings form');
-    const settings = loadSettingsFromStorage();
-
-    container.querySelectorAll('input').forEach(e => {
-      const attribute = e.name;
-      if (e.type === 'checkbox') {
-        e.checked = settings[attribute];
-      } else {
-        e.value = settings[attribute];
-      }
-
-      e.onchange = e.onkeyup = () => {
-        const settings = readSettingsFromForm();
-        saveSettingsInStorage(settings);
-        renderPreview(settings);
-      };
-    });
-
-    document
-      .querySelector<HTMLButtonElement>('#speed-reader-settings .reset')
-      .onclick = () => {
-        if (confirm('Are you sure you want to reset the settings?')) {
-          const settings = { ...defaultSettings };
-          saveSettingsInStorage(settings);
-          renderPreview(settings);
+    loadSettingsFromStorage().then(settings => {
+      container.querySelectorAll('input').forEach(e => {
+        const attribute = e.name;
+        if (e.type === 'checkbox') {
+          e.checked = settings[attribute];
+        } else {
+          e.value = settings[attribute];
         }
-      };
 
-    container.querySelector<HTMLInputElement>('input[name=fullScreen]')
-      .onchange = () => handleFullScreen(container);
-    handleFullScreen(container);
+        e.onchange = e.onkeyup = () => {
+          const settings = readSettingsFromForm();
+          saveSettingsInStorage(settings).then(renderPreview);
+        };
+      });
 
-    renderPreview(settings);
+      document
+        .querySelector<HTMLButtonElement>('#speed-reader-settings .reset')
+        .onclick = () => {
+          if (confirm('Are you sure you want to reset the settings?')) {
+            const settings = { ...defaultSettings };
+            saveSettingsInStorage(settings).then(renderPreview);
+            renderPreview(settings);
+          }
+        };
+
+      container.querySelector<HTMLInputElement>('input[name=fullScreen]')
+        .onchange = () => handleFullScreen(container);
+      handleFullScreen(container);
+
+      renderPreview(settings);
+    });
   }
 
   function handleFullScreen(container: HTMLElement): void {

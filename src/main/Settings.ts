@@ -1,3 +1,4 @@
+// ATTENTION: when updating this key have to update extension.js as well
 const SETTINGS_KEY = 'speed-reader-settings';
 
 export type Settings = {
@@ -22,29 +23,35 @@ export const defaultSettings = {
   height: 'auto',
 };
 
-export function loadSettingsFromStorage(): Settings {
-  // browser.storage is within the extension context, localStorage is just
-  // for easier testing
+export async function loadSettingsFromStorage(): Promise<Settings> {
   try {
-    const settings = isExtensionContext()
-      ? (window as any).browser.storage.sync.get(SETTINGS_KEY)
-      : JSON.parse(localStorage.getItem(SETTINGS_KEY));
-
-    return settings && settings.fontFamily
-      ? settings
-      : defaultSettings;
+    // the main script when running has this variable populated by extension.js
+    if ((window as any).speedReaderSettings) {
+      return (window as any).speedReaderSettings;
+    } else if (isExtensionContext()) { // when running the options page
+      const value = await (window as any).browser.storage.sync
+        .get({ [SETTINGS_KEY]: defaultSettings });
+      return value[SETTINGS_KEY];
+    } else { // when just running locally for testing
+      return JSON.parse(localStorage.getItem(SETTINGS_KEY));
+    }
   } catch (e) {
     console.error(e);
     return defaultSettings;
   }
 }
 
-export function saveSettingsInStorage(settings: Settings): void {
+export async function saveSettingsInStorage(settings: Settings)
+  : Promise<Settings> {
   if (isExtensionContext()) {
-    (window as any).browser.storage.sync.set({ SETTINGS_KEY: settings });
+    await (window as any).browser.storage.sync.set({
+      [SETTINGS_KEY]: settings,
+    });
   } else {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   }
+
+  return settings;
 }
 
 function isExtensionContext(): boolean {

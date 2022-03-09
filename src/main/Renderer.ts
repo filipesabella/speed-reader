@@ -1,4 +1,5 @@
 import { Iterator } from './Iterator';
+import { loadSettingsFromStorage, Settings } from './Settings';
 import { remainingTime } from './words';
 
 export class Renderer {
@@ -13,7 +14,7 @@ export class Renderer {
     this.removeUI();
 
     const style = document.createElement('style');
-    style.textContent = styles;
+    style.textContent = styles(loadSettingsFromStorage());
     document.head.append(style);
 
     document.body.innerHTML += `
@@ -155,13 +156,13 @@ const template = (
     </div>
   </div>`;
 
-const styles = `
+const styles = (settings: Settings) => `
 #speed-reader-container {
-  --bg-color: hsl(0, 0%, 15%);
-  --text-color: hsl(0, 0%, 90%);
-  --middle-letter-color: hsl(25, 50%, 50%);
-  --font-family: monospace;
-  --font-size: 30px;
+  --bg-color: ${settings.backgroundColor};
+  --text-color: ${settings.textColor};
+  --middle-letter-color: ${settings.middleLetterColor};
+  --font-family: ${settings.fontFamily};
+  --font-size: ${settings.fontSize};
 }
 
 #speed-reader-container {
@@ -186,7 +187,8 @@ const styles = `
 
 #speed-reader-container .speed-reader-wrapper {
   padding: 10px;
-  width: 90%;
+  width: ${settings.fullScreen ? '100%' : settings.width};
+  height: ${settings.fullScreen ? '100%' : settings.height};
   position: relative;
   background: var(--bg-color);
 }

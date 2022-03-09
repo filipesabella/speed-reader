@@ -8,8 +8,8 @@
     "start-settings": "parcel src/settings/settings.html",
     "test": "mocha src/test/**/*.test.ts -r jsdom-global/register -r ts-node/register",
     "build-settings": "parcel build src/settings/settings.html --out-dir build/ --out-file settings --public-url ./ --no-source-maps --no-minify",
-    "build-main": "yarn test && parcel build src/main/speed-reader.ts --out-dir build/ --out-file speed-reader.js --no-source-maps --no-minify",
-    "build": "yarn build-settings && yarn build-main",
+    "build-main": "parcel build src/main/speed-reader.ts --out-dir build/ --out-file speed-reader.js --no-source-maps --no-minify",
+    "build": "yarn test && yarn build-settings && yarn build-main",
     "package": "zip -r extension.zip build icons extension.js manifest.json"
   },
   "devDependencies": {

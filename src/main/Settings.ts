@@ -30,7 +30,9 @@ export function loadSettingsFromStorage(): Settings {
       ? (window as any).browser.storage.sync.get(SETTINGS_KEY)
       : JSON.parse(localStorage.getItem(SETTINGS_KEY));
 
-    return settings ?? defaultSettings;
+    return settings && settings.fontFamily
+      ? settings
+      : defaultSettings;
   } catch (e) {
     console.error(e);
     return defaultSettings;

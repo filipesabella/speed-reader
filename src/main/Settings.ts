@@ -27,7 +27,7 @@ export async function loadSettingsFromStorage(): Promise<Settings> {
   try {
     // the main script when running has this variable populated by extension.js
     if ((window as any).speedReaderSettings) {
-      return (window as any).speedReaderSettings;
+      return (window as any).speedReaderSettings || defaultSettings;
     } else if (isExtensionContext()) { // when running the options page
       const value = await (window as any).browser.storage.sync
         .get({ [SETTINGS_KEY]: defaultSettings });

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Speed Reader",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Speed-read the web",
   "homepage_url": "https://github.com/filipesabella/speed-reader",
   "browser_specific_settings": {

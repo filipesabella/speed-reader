@@ -12,6 +12,8 @@ export type Settings = {
   height: string;
 };
 
+// duplicated in extension.js. when in the mood, de-duplicate by building
+// extension.js with parcel bundler to support importing from settings.ts
 export const defaultSettings = {
   fontFamily: 'monospace',
   backgroundColor: 'hsl(0, 0%, 15%)',
@@ -27,7 +29,7 @@ export async function loadSettingsFromStorage(): Promise<Settings> {
   try {
     // the main script when running has this variable populated by extension.js
     if ((window as any).speedReaderSettings) {
-      return (window as any).speedReaderSettings || defaultSettings;
+      return (window as any).speedReaderSettings;
     } else if (isExtensionContext()) { // when running the options page
       const value = await (window as any).browser.storage.sync
         .get({ [SETTINGS_KEY]: defaultSettings });

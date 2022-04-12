@@ -6,7 +6,7 @@
   "homepage_url": "https://github.com/filipesabella/speed-reader",
   "browser_specific_settings": {
     "gecko": {
-      "id": "9ad66b79-fd5e-477a-8915-eea26c83ff42",
+      "id": "{9ad66b79-fd5e-477a-8915-eea26c83ff42}",
       "strict_min_version": "42.0"
     }
   },

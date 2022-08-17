@@ -24,7 +24,7 @@ export class Renderer {
         </div>
       `;
 
-      this.container = document.querySelector('#speed-reader-container');
+      this.container = document.querySelector('#speed-reader-container')!;
 
       this.bindEvents(
         settings,
@@ -32,9 +32,9 @@ export class Renderer {
         changeSpeed,
         navigateWord,
         document
-          .querySelector('#speed-reader-container .speed-reader-speed-minus'),
+          .querySelector('#speed-reader-container .speed-reader-speed-minus')!,
         document
-          .querySelector('#speed-reader-container .speed-reader-speed-plus'));
+          .querySelector('#speed-reader-container .speed-reader-speed-plus')!);
     });
   }
 

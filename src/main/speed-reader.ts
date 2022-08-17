@@ -4,7 +4,7 @@ import { textToWords, timeoutForWord } from './words';
 const DEFAULT_SPEED = 400;
 
 const startSpeedReader = () => {
-  const text = window.getSelection().toString();
+  const text = window.getSelection()?.toString() || '';
   if (!text.trim()) return;
 
   const words = textToWords(text);

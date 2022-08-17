@@ -8,7 +8,7 @@ import {
 (function() {
   document.body.onload = () => {
     const container = document
-      .querySelector<HTMLDivElement>('#speed-reader-settings form');
+      .querySelector<HTMLDivElement>('#speed-reader-settings form')!;
     loadSettingsFromStorage().then(settings => {
       container.querySelectorAll('input').forEach(e => {
         const attribute = e.name;
@@ -25,7 +25,7 @@ import {
       });
 
       document
-        .querySelector<HTMLButtonElement>('#speed-reader-settings .reset')
+        .querySelector<HTMLButtonElement>('#speed-reader-settings .reset')!
         .onclick = () => {
           if (confirm('Are you sure you want to reset the settings?')) {
             const settings = { ...defaultSettings };
@@ -34,7 +34,7 @@ import {
           }
         };
 
-      container.querySelector<HTMLInputElement>('input[name=fullScreen]')
+      container.querySelector<HTMLInputElement>('input[name=fullScreen]')!
         .onchange = () => handleFullScreen(container);
       handleFullScreen(container);
 
@@ -44,16 +44,16 @@ import {
 
   function handleFullScreen(container: HTMLElement): void {
     const checked = container
-      .querySelector<HTMLInputElement>('input[name=fullScreen]').checked;
-    container
-      .querySelector<HTMLInputElement>('input[name=width]').disabled = checked;
-    container
-      .querySelector<HTMLInputElement>('input[name=height]').disabled = checked;
+      .querySelector<HTMLInputElement>('input[name=fullScreen]')!.checked;
+    container.querySelector<HTMLInputElement>('input[name=width]')!
+      .disabled = checked;
+    container.querySelector<HTMLInputElement>('input[name=height]')!
+      .disabled = checked;
   }
 
   function renderPreview(settings: Settings): void {
     const container = document
-      .querySelector<HTMLDivElement>('#speed-reader-settings .preview');
+      .querySelector<HTMLDivElement>('#speed-reader-settings .preview')!;
     container.style.setProperty('--bg-color', settings.backgroundColor);
     container.style.setProperty('--font-family', settings.fontFamily);
     container.style.setProperty('--font-size', settings.fontSize);
@@ -66,11 +66,18 @@ import {
 
   function readSettingsFromForm(): Settings {
     const container = document
-      .querySelector<HTMLDivElement>('#speed-reader-settings form');
+      .querySelector<HTMLDivElement>('#speed-reader-settings form')!;
     const settings = { ...defaultSettings };
     container.querySelectorAll('input').forEach(e => {
       const attribute = e.name;
-      settings[attribute] = e.type === 'checkbox' ? e.checked : e.value;
+      if (e.type === 'checkbox') {
+        settings[attribute] = e.checked;
+      } else if (e.type === 'number') {
+        settings[attribute] =
+          parseInt(e.value) || defaultSettings.speedIncrement;
+      } else {
+        settings[attribute] = e.value;
+      }
     });
 
     return settings;

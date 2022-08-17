@@ -27,6 +27,7 @@ export class Renderer {
       this.container = document.querySelector('#speed-reader-container');
 
       this.bindEvents(
+        settings,
         togglePause,
         changeSpeed,
         navigateWord,
@@ -45,6 +46,7 @@ export class Renderer {
   }
 
   private bindEvents(
+    settings: Settings,
     togglePause: (pause?: boolean) => void,
     changeSpeed: (delta: number) => void,
     navigateWord: () => void,
@@ -69,8 +71,8 @@ export class Renderer {
           this.words.next();
           navigateWord();
         },
-        'ArrowUp': () => changeSpeed(50),
-        'ArrowDown': () => changeSpeed(-50),
+        'ArrowUp': () => changeSpeed(settings.speedIncrement),
+        'ArrowDown': () => changeSpeed(-settings.speedIncrement),
       },
       'up': {
         'Escape': () => stopAndHide(),
@@ -94,8 +96,10 @@ export class Renderer {
     document.addEventListener('keydown', onkeydown);
     document.addEventListener('keyup', onkeyup);
 
-    speedMinusButton.addEventListener('click', () => changeSpeed(-50));
-    speedPlusButton.addEventListener('click', () => changeSpeed(+50));
+    speedMinusButton.addEventListener('click',
+      () => changeSpeed(-settings.speedIncrement));
+    speedPlusButton.addEventListener('click',
+      () => changeSpeed(settings.speedIncrement));
 
     const stopAndHide = () => {
       togglePause(true);

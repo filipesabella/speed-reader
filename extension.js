@@ -1,6 +1,6 @@
 browser.browserAction.onClicked.addListener(() => {
   browser.storage.sync.get('speed-reader-settings').then(e => {
-    const settings = e['speed-reader-settings'] || {
+    const settings = {
       fontFamily: 'monospace',
       backgroundColor: 'hsl(0, 0%, 15%)',
       textColor: 'hsl(0, 0%, 90%)',
@@ -9,6 +9,8 @@ browser.browserAction.onClicked.addListener(() => {
       fullScreen: false,
       width: '90%',
       height: 'auto',
+      speedIncrement: 50,
+      ...(e['speed-reader-settings'] || {})
     };
 
     browser.tabs.executeScript({

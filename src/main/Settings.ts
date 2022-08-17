@@ -10,6 +10,7 @@ export type Settings = {
   fullScreen: boolean;
   width: string;
   height: string;
+  speedIncrement: number;
 };
 
 // duplicated in extension.js. when in the mood, de-duplicate by building
@@ -23,19 +24,29 @@ export const defaultSettings = {
   fullScreen: false,
   width: '90%',
   height: 'auto',
+  speedIncrement: 30,
 };
 
 export async function loadSettingsFromStorage(): Promise<Settings> {
   try {
     // the main script when running has this variable populated by extension.js
     if ((window as any).speedReaderSettings) {
-      return (window as any).speedReaderSettings;
+      return {
+        ...defaultSettings,
+        ...(window as any).speedReaderSettings
+      };
     } else if (isExtensionContext()) { // when running the options page
       const value = await (window as any).browser.storage.sync
         .get({ [SETTINGS_KEY]: defaultSettings });
-      return value[SETTINGS_KEY];
+      return {
+        ...defaultSettings,
+        ...value[SETTINGS_KEY]
+      };
     } else { // when just running locally for testing
-      return JSON.parse(localStorage.getItem(SETTINGS_KEY));
+      return {
+        ...defaultSettings,
+        ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')
+      };
     }
   } catch (e) {
     console.error(e);

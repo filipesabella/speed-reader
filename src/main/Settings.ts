@@ -11,6 +11,8 @@ export type Settings = {
   width: string;
   height: string;
   speedIncrement: number;
+  initialSpeed: number;
+  wordAmount: number;
 };
 
 // duplicated in extension.js. when in the mood, de-duplicate by building
@@ -25,6 +27,8 @@ export const defaultSettings = {
   width: '90%',
   height: 'auto',
   speedIncrement: 30,
+  initialSpeed: 400,
+  wordAmount: 1,
 };
 
 export async function loadSettingsFromStorage(): Promise<Settings> {

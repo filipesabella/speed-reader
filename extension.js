@@ -10,6 +10,8 @@ browser.browserAction.onClicked.addListener(() => {
       width: '90%',
       height: 'auto',
       speedIncrement: 50,
+      intialSpeed: 400,
+      wordAmount: 1,
       ...(e['speed-reader-settings'] || {})
     };
 

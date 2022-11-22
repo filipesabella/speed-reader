@@ -8,34 +8,33 @@ export class Renderer {
   constructor(private readonly words: Iterator<string>) { }
 
   public initialize(
+    settings: Settings,
     togglePause: (pause?: boolean) => void,
     changeSpeed: (delta: number) => void,
     navigateWord: () => void): void {
     this.removeUI();
 
-    loadSettingsFromStorage().then(settings => {
-      const style = document.createElement('style');
-      style.textContent = styles(settings);
-      document.head.append(style);
+    const style = document.createElement('style');
+    style.textContent = styles(settings);
+    document.head.append(style);
 
-      document.body.innerHTML += `
+    document.body.innerHTML += `
         <div id="speed-reader-container">
           ${template('&nbsp;', '', '', 0, '')}
         </div>
       `;
 
-      this.container = document.querySelector('#speed-reader-container')!;
+    this.container = document.querySelector('#speed-reader-container')!;
 
-      this.bindEvents(
-        settings,
-        togglePause,
-        changeSpeed,
-        navigateWord,
-        document
-          .querySelector('#speed-reader-container .speed-reader-speed-minus')!,
-        document
-          .querySelector('#speed-reader-container .speed-reader-speed-plus')!);
-    });
+    this.bindEvents(
+      settings,
+      togglePause,
+      changeSpeed,
+      navigateWord,
+      document
+        .querySelector('#speed-reader-container .speed-reader-speed-minus')!,
+      document
+        .querySelector('#speed-reader-container .speed-reader-speed-plus')!);
   }
 
   public render(word: string, wpm: number, interval: number): void {

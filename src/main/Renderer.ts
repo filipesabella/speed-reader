@@ -1,5 +1,5 @@
 import { Iterator } from './Iterator';
-import { loadSettingsFromStorage, Settings } from './Settings';
+import { Settings } from './Settings';
 import { remainingTime } from './words';
 
 export class Renderer {
@@ -39,7 +39,7 @@ export class Renderer {
 
   public render(word: string, wpm: number, interval: number): void {
     const time = this.renderTime(interval);
-    const [start, middle, end] = this.renderWord(word);
+    const [start, middle, end] = this.renderWords(word);
 
     this.container.innerHTML = template(start, middle, end, wpm, time);
   }
@@ -110,17 +110,19 @@ export class Renderer {
     };
   }
 
-  private renderWord(word: string): [string, string, string] {
+  private renderWords(word: string): [string, string, string] {
     let middleIndex = Math.floor(word.length / 2);
 
     // if the word ends in a punctuation mark, move the middle one character
     // back. it looks better.
-    if (!!word.match(/[^a-zA-Z]\n?/)) middleIndex--;
+    if (!!word.match(/[^a-zA-Z0-9]\n?/)) middleIndex--;
+
+    if (word.charAt(middleIndex) === ' ') middleIndex--;
 
     return [
-      word.substring(0, middleIndex),
+      word.substring(0, middleIndex).replace(/\s/g, '&nbsp'),
       word.charAt(middleIndex),
-      word.substr(middleIndex + 1),
+      word.substr(middleIndex + 1).replace(/\s/g, '&nbsp'),
     ];
   }
 

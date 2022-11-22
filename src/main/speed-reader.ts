@@ -7,7 +7,7 @@ const startSpeedReader = () => {
   if (!text.trim()) return;
 
   loadSettingsFromStorage().then(settings => {
-    const words = textToWords(text);
+    const words = textToWords(text, settings.wordAmount);
     const renderer = new Renderer(words);
 
     let speedInWPM = settings.initialSpeed;

@@ -1,4 +1,6 @@
-browser.browserAction.onClicked.addListener(() => {
+browser.browserAction.onClicked.addListener(runSpeedReader);
+
+function runSpeedReader(){
   browser.storage.sync.get('speed-reader-settings').then(e => {
     const settings = {
       fontFamily: 'monospace',
@@ -25,4 +27,16 @@ browser.browserAction.onClicked.addListener(() => {
       file: '/build/speed-reader.js'
     });
   });
+}
+
+// context menu
+browser.contextMenus.create({
+  id: "speed-reader",
+  title: "Speed Reader",
+  contexts: ["selection"]
+});
+
+browser.contextMenus.onClicked.addListener((info) => {
+  if(info.menuItemId == "speed-reader")
+    runSpeedReader();
 });

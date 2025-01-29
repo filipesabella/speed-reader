@@ -15,6 +15,7 @@
     "96": "icons/speed-reader-96.png"
   },
   "permissions": [
+    "contextMenus",
     "activeTab",
     "storage"
   ],

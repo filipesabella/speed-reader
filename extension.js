@@ -1,6 +1,6 @@
 browser.browserAction.onClicked.addListener(runSpeedReader);
 
-function runSpeedReader(){
+function runSpeedReader() {
   browser.storage.sync.get('speed-reader-settings').then(e => {
     const settings = {
       fontFamily: 'monospace',
@@ -37,6 +37,7 @@ browser.contextMenus.create({
 });
 
 browser.contextMenus.onClicked.addListener((info) => {
-  if(info.menuItemId == "speed-reader")
+  if (info.menuItemId == "speed-reader") {
     runSpeedReader();
+  }
 });

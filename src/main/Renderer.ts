@@ -3,7 +3,7 @@ import { Settings } from './Settings';
 import { remainingTime } from './words';
 
 export class Renderer {
-  private container: HTMLDivElement;
+  private container!: HTMLDivElement;
 
   constructor(private readonly words: Iterator<string>) { }
 
@@ -80,7 +80,7 @@ export class Renderer {
 
     const handleEvent = (type: 'press' | 'down' | 'up') =>
       (e: KeyboardEvent) => {
-        const handler = eventHandlers[type][e.code];
+        const handler = (eventHandlers[type] as { [key: string]: () => void })[e.code];
         if (handler) {
           e.preventDefault();
           handler();

@@ -13,7 +13,8 @@ There are other extensions that do the same, but none for Firefox that doesn't r
 
 ## Usage
 
-Simply select the text you want to speed-read and click the extension button.
+Simply select the text you want to speed-read and click the extension button or
+right click the page and then the extension button (thanks @sheldoncork).
 
 
 ### Hotkeys

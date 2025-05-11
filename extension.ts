@@ -12,9 +12,6 @@ browser.runtime.onInstalled.addListener(() => {
     id: "speed-reader",
     title: "Speed Reader",
     contexts: ["selection"],
-    onclick: () => {
-      runSpeedReader();
-    },
   });
 });
 
@@ -42,4 +39,10 @@ async function runSpeedReader(): Promise<void> {
   });
 }
 
-browser.browserAction.onClicked.addListener(runSpeedReader);
+browser.action.onClicked.addListener(runSpeedReader);
+
+browser.contextMenus.onClicked.addListener((info) => {
+  if (info.menuItemId == "speed-reader") {
+    runSpeedReader();
+  }
+});

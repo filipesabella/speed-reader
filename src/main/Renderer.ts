@@ -122,7 +122,7 @@ export class Renderer {
     return [
       word.substring(0, middleIndex).replace(/\s/g, '&nbsp'),
       word.charAt(middleIndex),
-      word.substr(middleIndex + 1).replace(/\s/g, '&nbsp'),
+      word.substring(middleIndex + 1).replace(/\s/g, '&nbsp'),
     ];
   }
 

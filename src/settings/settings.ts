@@ -11,11 +11,11 @@ import {
       .querySelector<HTMLDivElement>('#speed-reader-settings form')!;
     loadSettingsFromStorage().then(settings => {
       container.querySelectorAll('input').forEach(e => {
-        const attribute = e.name;
+        const attribute = e.name as keyof Settings;
         if (e.type === 'checkbox') {
-          e.checked = settings[attribute];
+          e.checked = settings[attribute] as boolean;
         } else {
-          e.value = settings[attribute];
+          e.value = settings[attribute] as string;
         }
 
         e.onchange = e.onkeyup = () => {
@@ -67,16 +67,16 @@ import {
   function readSettingsFromForm(): Settings {
     const container = document
       .querySelector<HTMLDivElement>('#speed-reader-settings form')!;
-    const settings = { ...defaultSettings };
+    const settings: Settings = { ...defaultSettings };
     container.querySelectorAll('input').forEach(e => {
-      const attribute = e.name;
+      const attribute = e.name as keyof Settings;
       if (e.type === 'checkbox') {
-        settings[attribute] = e.checked;
+        (settings as any)[attribute] = e.checked;
       } else if (e.type === 'number') {
-        settings[attribute] =
+        (settings as any)[attribute] =
           parseInt(e.value) || defaultSettings.speedIncrement;
       } else {
-        settings[attribute] = e.value;
+        (settings as any)[attribute] = e.value;
       }
     });
 

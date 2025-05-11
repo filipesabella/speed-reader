@@ -13,20 +13,20 @@ There are other extensions that do the same, but none for Firefox that doesn't r
 
 ## Usage
 
-Simply select the text you want to speed-read and click the extension button or
-right click the page and then the extension button (thanks @sheldoncork).
-
+Simply select the text you want to speed-read and click the extension button,
+right click the page and then the extension button, or by default
+use CTRL+ALT+U, see [extension shortcuts](https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox) on how to change (thanks @sheldoncork).
 
 ### Hotkeys
 
-|Button|Action|
-|-|-|
-|Spacebar|Toggle pause|
-|Escape|Close it|
-|Arrow Up|Speed Up|
-|Arrow Down|Speed Down|
-|Arrow Left|Previous word (useful when paused)|
-|Arrow Right|Next word (useful when paused)|
+| Button      | Action                             |
+| ----------- | ---------------------------------- |
+| Spacebar    | Toggle pause                       |
+| Escape      | Close it                           |
+| Arrow Up    | Speed Up                           |
+| Arrow Down  | Speed Down                         |
+| Arrow Left  | Previous word (useful when paused) |
+| Arrow Right | Next word (useful when paused)     |
 
 You can also click anywhere on the background to close it.
 
@@ -54,4 +54,4 @@ yarn build
 
 Creates a `build/speed-reader.js` file that's ready to be executed.
 
-It is possible to simply add that file as a bookmarklet to achieve the same result as installing the extension.
+It is possible to simply add that file as a [bookmarklet](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#installing) to achieve the same result as installing the extension.

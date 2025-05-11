@@ -12,11 +12,10 @@ export type Settings = {
   height: string;
   speedIncrement: number;
   initialSpeed: number;
+  punctuationDelayMultiplier: number;
   wordAmount: number;
 };
 
-// duplicated in extension.js. when in the mood, de-duplicate by building
-// extension.js with parcel bundler to support importing from settings.ts
 export const defaultSettings = {
   fontFamily: 'monospace',
   backgroundColor: 'hsl(0, 0%, 15%)',
@@ -28,6 +27,7 @@ export const defaultSettings = {
   height: 'auto',
   speedIncrement: 30,
   initialSpeed: 400,
+  punctuationDelayMultiplier: 2,
   wordAmount: 1,
 };
 

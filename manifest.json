@@ -19,6 +19,14 @@
     "default_icon": "icons/speed-reader-36.png",
     "default_title": "Speed Reader"
   },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+U"
+      },
+      "description": "Speed-read the selected text"
+    }
+  },
   "background": {
     "scripts": ["build/extension.js"],
     "service_worker": "build/extension.js"

@@ -1,30 +1,36 @@
 {
   "name": "speed-reader",
   "version": "1.0.5",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "start": "parcel src/test/test.html",
     "start-settings": "parcel src/settings/settings.html",
     "test": "mocha -r jsdom-global/register -r ts-node/register src/test/**/*.test.ts",
-    "build-settings": "parcel build src/settings/settings.html --out-dir build/ --out-file settings --public-url ./ --no-source-maps --no-minify",
-    "build-main": "parcel build src/main/speed-reader.ts --out-dir build/ --out-file speed-reader.js --no-source-maps --no-minify",
-    "build": "yarn test && yarn build-settings && yarn build-main",
-    "package": "rm -rf build && yarn build && zip -r extension.zip build icons extension.js manifest.json"
+    "build-settings": "parcel build src/settings/settings.html --dist-dir build/ --public-url ./ --no-source-maps",
+    "build-main": "parcel build src/main/speed-reader.ts --dist-dir build/ --no-source-maps",
+    "build-extension": "parcel build extension.ts --dist-dir build/ --no-source-maps",
+    "build": "yarn test && yarn build-settings && yarn build-main && yarn build-extension",
+    "package": "rm -rf build && yarn build && zip -r extension.zip build icons manifest.json"
   },
   "devDependencies": {
+    "@parcel/core": "^2.14.4",
+    "@parcel/transformer-less": "2.14.4",
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^22.12.0",
+    "@types/sinon": "^17.0.4",
+    "@types/webextension-polyfill": "^0.12.3",
+    "chai": "^5.2.0",
     "jsdom": "^26.0.0",
     "jsdom-global": "^3.0.2",
     "less": "^4.2.2",
-    "parcel-bundler": "^1.12.5",
+    "mocha": "^11.2.2",
+    "parcel": "^2.14.4",
+    "sinon": "^20.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3",
-    "chai": "^4.3.6",
-    "mocha": "^10.0.0",
-    "sinon": "^14.0.0",
-    "@types/mocha": "^9.1.1",
-    "@types/sinon": "^10.0.12",
-    "@types/chai": "^4.3.1"
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "webextension-polyfill": "^0.12.0"
   }
 }

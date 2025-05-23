@@ -5,7 +5,7 @@
   "scripts": {
     "start": "parcel src/test/test.html",
     "start-settings": "parcel src/settings/settings.html",
-    "test": "mocha -r jsdom-global/register -r ts-node/register src/test/**/*.test.ts",
+    "test": "mocha --require ts-node/register src/test/**/*.test.ts",
     "build-settings": "parcel build src/settings/settings.html --dist-dir build/ --public-url ./ --no-source-maps",
     "build-main": "parcel build src/main/speed-reader.ts --dist-dir build/ --no-source-maps",
     "build-extension": "parcel build extension.ts --dist-dir build/ --no-source-maps",
@@ -15,19 +15,17 @@
   "devDependencies": {
     "@parcel/core": "^2.14.4",
     "@parcel/transformer-less": "2.14.4",
-    "@types/chai": "^5.2.2",
-    "@types/mocha": "^10.0.10",
     "@types/node": "^22.12.0",
-    "@types/sinon": "^17.0.4",
     "@types/webextension-polyfill": "^0.12.3",
-    "chai": "^5.2.0",
+    "@types/mocha": "^7.0.2",
+    "@types/chai": "^4.2.11",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "ts-node": "^8.8.1",
     "jsdom": "^26.0.0",
     "jsdom-global": "^3.0.2",
     "less": "^4.2.2",
-    "mocha": "^11.2.2",
     "parcel": "^2.14.4",
-    "sinon": "^20.0.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
   "dependencies": {

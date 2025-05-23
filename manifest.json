@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Speed Reader",
   "version": "1.5",
   "description": "Speed-read the web",
@@ -7,26 +7,21 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "{9ad66b79-fd5e-477a-8915-eea26c83ff42}",
-      "strict_min_version": "58.0"
+      "strict_min_version": "109.0"
     }
   },
   "icons": {
     "48": "icons/speed-reader-48.png",
     "96": "icons/speed-reader-96.png"
   },
-  "permissions": [
-    "contextMenus",
-    "activeTab",
-    "storage"
-  ],
-  "browser_action": {
+  "permissions": ["contextMenus", "activeTab", "storage", "scripting"],
+  "action": {
     "default_icon": "icons/speed-reader-36.png",
     "default_title": "Speed Reader"
   },
   "background": {
-    "scripts": [
-      "extension.js"
-    ]
+    "scripts": ["build/extension.js"],
+    "service_worker": "build/extension.js"
   },
   "options_ui": {
     "page": "build/settings.html"

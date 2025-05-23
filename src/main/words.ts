@@ -1,4 +1,5 @@
 import { Iterator } from './Iterator';
+import { defaultSettings } from './Settings';
 
 export function textToWords(text: string, wordAmount: number)
   : Iterator<string> {
@@ -44,7 +45,8 @@ export function timeoutForWord(interval: number, word: string): number {
   if (word.match(/\n$/)) {
     intervalMultiplier = 3;
   } else if (word.match(/[,\.\?\!\:]$/)) {
-    intervalMultiplier = 2;
+    intervalMultiplier = defaultSettings.punctuationDelayMultiplier < 1 ?
+      1 : defaultSettings.punctuationDelayMultiplier; // don't allow < 1 on the multiplier
   }
 
   return interval * intervalMultiplier;

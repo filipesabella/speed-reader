@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "target": "ESNext",
+    "moduleResolution": "node",
     "module": "commonjs",
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "types": [
-      "mocha"
-    ]
-  }
+    "rootDir": ".",
+    "types": ["mocha"],
+  },
+  "include": ["./"],
+  "exclude": ["node_modules", "dist"]
 }

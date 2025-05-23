@@ -1,8 +1,10 @@
 import { expect } from 'chai';
 import { Iterator } from '../main/Iterator';
 import { remainingTime, textToWords, timeoutForWord } from '../main/words';
+import { defaultSettings } from '../main/Settings';
 
 const interval = 100;
+const newInterval = interval * defaultSettings.punctuationDelayMultiplier;
 
 describe('words tests', () => {
   describe('timeoutForWord', () => {
@@ -12,11 +14,11 @@ describe('words tests', () => {
     });
 
     it('returns a bigger timeout for words ending in stop symbols', () => {
-      expect(timeoutForWord(interval, 'hello.')).to.equal(200);
-      expect(timeoutForWord(interval, 'hello,')).to.equal(200);
-      expect(timeoutForWord(interval, 'hello?')).to.equal(200);
-      expect(timeoutForWord(interval, 'hello!')).to.equal(200);
-      expect(timeoutForWord(interval, 'hello:')).to.equal(200);
+      expect(timeoutForWord(interval, 'hello.')).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello,')).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello?')).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello!')).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello:')).to.equal(newInterval);
     });
 
     it('returns interval as timeout for other words', () => {
@@ -29,14 +31,14 @@ describe('words tests', () => {
   describe('remainingTime', () => {
     it('returns the remaining time for an iterator of words', () => {
       const words = new Iterator([
-        'hello',
-        'there!',
-        'friend\n',
+        'hello',     // interval
+        'there!',    // interval * punctuationDelayMultiplier
+        'friend\n',  // interval * 3
       ]);
       words.next();
 
       const time = remainingTime(interval, words);
-      expect(time).to.equal(600);
+      expect(time).to.equal(interval * 4 + interval * defaultSettings.punctuationDelayMultiplier);
     })
   });
 

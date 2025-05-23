@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Speed Reader",
-  "version": "1.5",
+  "version": "1.6",
   "description": "Speed-read the web",
   "homepage_url": "https://github.com/filipesabella/speed-reader",
   "browser_specific_settings": {
@@ -14,7 +14,12 @@
     "48": "icons/speed-reader-48.png",
     "96": "icons/speed-reader-96.png"
   },
-  "permissions": ["contextMenus", "activeTab", "storage", "scripting"],
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
   "action": {
     "default_icon": "icons/speed-reader-36.png",
     "default_title": "Speed Reader"
@@ -28,7 +33,9 @@
     }
   },
   "background": {
-    "scripts": ["build/extension.js"],
+    "scripts": [
+      "build/extension.js"
+    ],
     "service_worker": "build/extension.js"
   },
   "options_ui": {

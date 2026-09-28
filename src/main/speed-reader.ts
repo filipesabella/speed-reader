@@ -28,9 +28,12 @@ const createWakeLock = () => {
 };
 
 const startSpeedReader = () => {
-  // without a selection, read the page's main article instead
+  // text given by the extension (a selection inside an iframe) comes first,
+  // then the selection, then the page's main article
+  const given = (window as any).speedReaderText || '';
   const selection = window.getSelection()?.toString() || '';
-  const text = selection.trim() ? selection : articleText(document);
+  const text = [given, selection].find(t => t.trim())
+    ?? articleText(document);
   if (!text.trim()) return;
 
   loadSettingsFromStorage().then(settings => {

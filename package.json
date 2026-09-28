@@ -16,10 +16,10 @@
     "fmt": "dprint fmt"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0",
-    "dprint": "^0.57.1",
-    "less": "^4.2.2",
-    "typescript": "^6.0.3",
+    "@types/node": "^26.6.3",
+    "dprint": "^0.57.4",
+    "less": "^4.9.1",
+    "typescript": "^7.0.2",
     "vite": "^8.3.1",
     "vitest": "^5.0.2"
   },

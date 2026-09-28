@@ -13,6 +13,34 @@ const startSpeedReader = () => {
     let speedInWPM = settings.initialSpeed;
     let interval = 60 * 1000 / settings.initialSpeed;
     let paused = false;
+    let wakeLock = {
+      take() {
+        if (this.lock || this.lockPromise) return;
+
+        this.lockPromise = navigator.wakeLock?.request();
+        this.lockPromise?.then(lock => {
+          this.lock = lock;
+          this.lockPromise = null;
+        });
+      },
+
+      drop() {
+        if (this.lock) {
+          this.clearLock();
+          return;
+        }
+
+        if (this.lockPromise) {
+          this.lockPromise.then(() => this.clearLock());
+          this.lockPromise = null; // allow overwrites by a future take()
+        }
+      },
+
+      clearLock() {
+        this.lock?.release();
+        this.lock = null; // allow overwrites by a future take()
+      }
+    };
 
     const changeSpeed = (delta: number) => {
       speedInWPM += delta;
@@ -30,13 +58,22 @@ const startSpeedReader = () => {
     const togglePause = (pause?: boolean) => {
       paused = pause !== undefined ? pause : !paused;
 
-      !paused && loop();
+      if (paused) {
+        wakeLock.drop();
+      } else {
+        wakeLock.take();
+        loop();
+      }
     }
 
+    wakeLock.take();
     renderer.initialize(settings, togglePause, changeSpeed, navigateWord);
 
     const loop = () => {
-      if (words.ended() || paused) return;
+      if (words.ended() || paused) {
+        wakeLock.drop();
+        return;
+      }
 
       const nextWord = words.next();
       renderer.render(nextWord, speedInWPM, interval);

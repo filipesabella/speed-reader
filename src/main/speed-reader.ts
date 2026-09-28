@@ -1,3 +1,4 @@
+import { articleText } from './article';
 import { Renderer } from './Renderer';
 import { loadSettingsFromStorage } from './Settings';
 import {
@@ -24,7 +25,9 @@ const createWakeLock = () => {
 };
 
 const startSpeedReader = () => {
-  const text = window.getSelection()?.toString() || '';
+  // without a selection, read the page's main article instead
+  const selection = window.getSelection()?.toString() || '';
+  const text = selection.trim() ? selection : articleText(document);
   if (!text.trim()) return;
 
   loadSettingsFromStorage().then(settings => {

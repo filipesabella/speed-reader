@@ -29,7 +29,7 @@
       "suggested_key": {
         "default": "Ctrl+Alt+U"
       },
-      "description": "Speed-read the selected text"
+      "description": "Speed-read the selected text, or the article if nothing is selected"
     }
   },
   "background": {

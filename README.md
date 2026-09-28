@@ -17,6 +17,10 @@ Simply select the text you want to speed-read and click the extension button,
 right click the page and then the extension button, or by default
 use CTRL+ALT+U, see [extension shortcuts](https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox) on how to change (thanks @sheldoncork).
 
+With nothing selected it reads the page's main article instead, extracted with
+[Readability](https://github.com/mozilla/readability), the library behind
+Firefox's reader view.
+
 ### Hotkeys
 
 | Button      | Action                             |

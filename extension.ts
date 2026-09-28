@@ -15,7 +15,7 @@ browser.runtime.onInstalled.addListener(() => {
   browser.contextMenus.create({
     id: 'speed-reader',
     title: 'Speed Reader',
-    contexts: ['selection'],
+    contexts: ['selection', 'page'],
   });
 });
 

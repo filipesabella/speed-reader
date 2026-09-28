@@ -33,6 +33,9 @@ jobs:
       - name: Run install
         run: yarn install --frozen-lockfile
 
+      - name: Check formatting
+        run: yarn dprint check
+
       - name: Run tests
         run: yarn test
 

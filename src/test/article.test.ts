@@ -39,6 +39,33 @@ describe('articleText', () => {
     ]);
   });
 
+  it('keeps the text around nested blocks on its own line', () => {
+    const doc = page(`
+      <article>
+        <p>${paragraph(1)}</p>
+        <ul><li>Parent item<ul><li>Child item</li></ul></li></ul>
+        <blockquote>Quoted intro<p>${paragraph(2)}</p></blockquote>
+        <div>Loose text <em>with emphasis</em><p>${
+      paragraph(3)
+    }</p>and after</div>
+        <p>A line<br>broken in two</p>
+      </article>
+    `);
+
+    expect(articleText(doc).split('\n')).to.deep.equal([
+      paragraph(1),
+      'Parent item',
+      'Child item',
+      'Quoted intro',
+      paragraph(2),
+      'Loose text with emphasis',
+      paragraph(3),
+      'and after',
+      'A line',
+      'broken in two',
+    ]);
+  });
+
   it('leaves the original document untouched', () => {
     const doc = page(`<article><p>${paragraph(1)}</p></article><nav>x</nav>`);
     const before = doc.body.innerHTML;

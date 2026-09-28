@@ -8,40 +8,50 @@ import {
 
 (function() {
   document.body.onload = () => {
-    const container = document
-      .querySelector<HTMLDivElement>('#speed-reader-settings form')!;
-    loadSettingsFromStorage().then(settings => {
-      container.querySelectorAll('input').forEach(e => {
-        const attribute = e.name as keyof Settings;
-        if (e.type === 'checkbox') {
-          e.checked = settings[attribute] as boolean;
-        } else {
-          e.value = settings[attribute] as string;
-        }
+    const form = document
+      .querySelector<HTMLFormElement>('#speed-reader-settings form')!;
 
-        e.onchange = e.onkeyup = () => {
-          const settings = readSettingsFromForm();
-          saveSettingsInStorage(settings).then(renderPreview);
-        };
+    // pressing enter in a field would otherwise submit and reload the page
+    form.onsubmit = e => e.preventDefault();
+
+    loadSettingsFromStorage().then(settings => {
+      fillForm(form, settings);
+      renderPreview(settings);
+
+      const save = () =>
+        saveSettingsInStorage(readSettingsFromForm()).then(renderPreview);
+
+      form.querySelectorAll('input').forEach(input => {
+        input.addEventListener('change', save);
+        input.addEventListener('keyup', save);
       });
 
-      document
-        .querySelector<HTMLButtonElement>('#speed-reader-settings .reset')!
-        .onclick = () => {
-          if (confirm('Are you sure you want to reset the settings?')) {
-            const settings = { ...defaultSettings };
-            saveSettingsInStorage(settings).then(renderPreview);
-            renderPreview(settings);
-          }
-        };
+      form.querySelector<HTMLInputElement>('input[name=fullScreen]')!
+        .addEventListener('change', () => handleFullScreen(form));
 
-      container.querySelector<HTMLInputElement>('input[name=fullScreen]')!
-        .onchange = () => handleFullScreen(container);
-      handleFullScreen(container);
-
-      renderPreview(settings);
+      form.querySelector<HTMLButtonElement>('.reset')!.onclick = () => {
+        if (confirm('Are you sure you want to reset the settings?')) {
+          const defaults = { ...defaultSettings };
+          fillForm(form, defaults);
+          renderPreview(defaults);
+          saveSettingsInStorage(defaults);
+        }
+      };
     });
   };
+
+  function fillForm(form: HTMLFormElement, settings: Settings): void {
+    form.querySelectorAll('input').forEach(input => {
+      const attribute = input.name as keyof Settings;
+      if (input.type === 'checkbox') {
+        input.checked = settings[attribute] as boolean;
+      } else {
+        input.value = String(settings[attribute]);
+      }
+    });
+
+    handleFullScreen(form);
+  }
 
   function handleFullScreen(container: HTMLElement): void {
     const checked = container

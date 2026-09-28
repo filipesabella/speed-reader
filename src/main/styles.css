@@ -33,6 +33,8 @@
   align-items: center;
   margin: 20px 0px;
   white-space: pre-wrap;
+  /* keeps a line's height while there's no word yet */
+  min-height: 1lh;
 }
 
 #speed-reader-container .speed-reader-word-start {

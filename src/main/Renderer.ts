@@ -1,9 +1,16 @@
 import { Iterator } from './Iterator';
 import { Settings } from './Settings';
 import { remainingTime } from './words';
+import templateStr from 'bundle-text:./template.html';
+import * as styles from 'bundle-text:./styles.css';
 
 export class Renderer {
   private container!: HTMLDivElement;
+  private wordStartEl!: HTMLDivElement;
+  private wordMiddleEl!: HTMLDivElement;
+  private wordEndEl!: HTMLDivElement;
+  private speedCurrentEl!: HTMLSpanElement;
+  private timeEl!: HTMLDivElement;
 
   constructor(private readonly words: Iterator<string>) { }
 
@@ -14,17 +21,32 @@ export class Renderer {
     navigateWord: () => void): void {
     this.removeUI();
 
-    const style = document.createElement('style');
-    style.textContent = styles(settings);
-    document.head.append(style);
+    const styleEl = document.createElement('style');
+    styleEl.id = 'speed-reader-style';
+    styleEl.textContent = (styles as any).default;
+    document.head.append(styleEl);
 
-    document.body.innerHTML += `
-        <div id="speed-reader-container">
-          ${template('&nbsp;', '', '', 0, '')}
-        </div>
-      `;
+    document.body.insertAdjacentHTML('beforeend', templateStr);
 
     this.container = document.querySelector('#speed-reader-container')!;
+
+    this.container.style.setProperty('--bg-color', settings.backgroundColor);
+    this.container.style.setProperty('--text-color', settings.textColor);
+    this.container.style.setProperty('--middle-letter-color', settings.middleLetterColor);
+    this.container.style.setProperty('--font-family', settings.fontFamily);
+    this.container.style.setProperty('--font-size', settings.fontSize);
+
+    const wrapper = this.container.querySelector('.speed-reader-wrapper') as HTMLElement;
+    wrapper.style.width = settings.fullScreen ? '100%' : settings.width;
+    wrapper.style.height = settings.fullScreen ? '100%' : settings.height;
+
+    const wordContainer = this.container.querySelector('.speed-reader-word-container') as HTMLElement;
+    wordContainer.style.height = settings.fullScreen ? '90%' : 'auto';
+    this.wordStartEl = this.container.querySelector('.speed-reader-word-start')!;
+    this.wordMiddleEl = this.container.querySelector('.speed-reader-word-middle')!;
+    this.wordEndEl = this.container.querySelector('.speed-reader-word-end')!;
+    this.speedCurrentEl = this.container.querySelector('.speed-reader-speed-current')!;
+    this.timeEl = this.container.querySelector('.speed-reader-time')!;
 
     this.bindEvents(
       settings,
@@ -41,7 +63,11 @@ export class Renderer {
     const time = this.renderTime(interval);
     const [start, middle, end] = this.renderWords(word);
 
-    this.container.innerHTML = template(start, middle, end, wpm, time);
+    this.wordStartEl.textContent = start;
+    this.wordMiddleEl.textContent = middle;
+    this.wordEndEl.textContent = end;
+    this.speedCurrentEl.textContent = wpm.toString();
+    this.timeEl.textContent = time;
   }
 
   private bindEvents(
@@ -120,9 +146,9 @@ export class Renderer {
     if (word.charAt(middleIndex) === ' ') middleIndex--;
 
     return [
-      word.substring(0, middleIndex).replace(/\s/g, '&nbsp'),
+      word.substring(0, middleIndex),
       word.charAt(middleIndex),
-      word.substring(middleIndex + 1).replace(/\s/g, '&nbsp'),
+      word.substring(middleIndex + 1),
     ];
   }
 
@@ -138,105 +164,6 @@ export class Renderer {
 
   private removeUI(): void {
     this.container?.remove();
+    document.getElementById('speed-reader-style')?.remove();
   }
 }
-
-const template = (
-  start: string,
-  middle: string,
-  end: string,
-  wpm: number,
-  time: string,) =>
-  `<div class="speed-reader-wrapper">
-    <div class="speed-reader-word-container">
-      <div class="speed-reader-word-start">${start}</div>
-      <div class="speed-reader-word-middle">${middle}</div>
-      <div class="speed-reader-word-end">${end}</div>
-    </div>
-    <div class="speed-reader-controls">
-      <div class="speed-reader-speed">
-        <span class="speed-reader-speed-minus">-</span>
-        <span class="speed-reader-speed-current">${wpm}</span>
-        <span class="speed-reader-speed-plus">+</span>
-      </div>
-      <div class="speed-reader-time">${time}</div>
-    </div>
-  </div>`;
-
-const styles = (settings: Settings) => `
-#speed-reader-container {
-  --bg-color: ${settings.backgroundColor};
-  --text-color: ${settings.textColor};
-  --middle-letter-color: ${settings.middleLetterColor};
-  --font-family: ${settings.fontFamily};
-  --font-size: ${settings.fontSize};
-}
-
-#speed-reader-container {
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(128, 128, 128, .50);
-
-  color: var(--text-color);
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-}
-
-#speed-reader-container .speed-reader-wrapper {
-  padding: 10px;
-  width: ${settings.fullScreen ? '100%' : settings.width};
-  height: ${settings.fullScreen ? '100%' : settings.height};
-  position: relative;
-  background: var(--bg-color);
-}
-
-#speed-reader-container .speed-reader-word-container {
-  display: flex;
-  align-items: center;
-  margin: 20px 0px;
-  height: ${settings.fullScreen ? '90%' : 'auto'};
-}
-
-#speed-reader-container .speed-reader-word-start {
-  flex: 1;
-  text-align: right;
-}
-
-#speed-reader-container .speed-reader-word-end {
-  flex: 1;
-  text-align: left;
-}
-
-#speed-reader-container .speed-reader-word-middle {
-  flex: 0;
-  color: var(--middle-letter-color);
-}
-
-#speed-reader-container .speed-reader-controls {
-  font-size: 12px;
-  display: flex;
-}
-
-#speed-reader-container .speed-reader-speed {
-  flex: 1;
-}
-
-#speed-reader-container .speed-reader-speed-plus,
-#speed-reader-container .speed-reader-speed-minus {
-  cursor: pointer;
-  user-select: none;
-  display: inline-block;
-  width: 15px;
-  text-align: center;
-}
-`;

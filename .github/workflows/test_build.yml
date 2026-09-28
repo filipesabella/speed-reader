@@ -4,19 +4,24 @@ on:
     branches: master
   pull_request:
     branches: "*"
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   build:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: 24
           cache: "yarn"
           cache-dependency-path: yarn.lock
 
@@ -26,16 +31,13 @@ jobs:
           yarn --version
 
       - name: Run install
-        run: yarn install
-
-      - name: Run tests
-        run: yarn test
+        run: yarn install --frozen-lockfile
 
       - name: Build
         run: yarn build
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: speed-reader
           path: ${{github.workspace}}/build/

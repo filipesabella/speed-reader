@@ -1,4 +1,3 @@
-import browser from "webextension-polyfill";
 import { defaultSettings, Settings } from "./src/main/Settings";
 
 declare global {
@@ -6,6 +5,8 @@ declare global {
     speedReaderSettings: Settings;
   }
 }
+
+const browser = (globalThis as any).browser || (globalThis as any).chrome;
 
 browser.runtime.onInstalled.addListener(() => {
   browser.contextMenus.create({
@@ -25,6 +26,7 @@ async function runSpeedReader(): Promise<void> {
     ...(settings["speed-reader-settings"] || {}),
   };
 
+  // Inject settings into the page
   await browser.scripting.executeScript({
     target: { tabId: tab.id },
     func: (settings: Settings) => {
@@ -33,15 +35,30 @@ async function runSpeedReader(): Promise<void> {
     args: [finalSettings],
   });
 
-  await browser.scripting.executeScript({
+  // Check if the script is already loaded on this page
+  const results = await browser.scripting.executeScript({
     target: { tabId: tab.id },
-    files: ["/build/speed-reader.js"],
+    func: () => {
+      if (typeof (window as any).startSpeedReader === 'function') {
+        (window as any).startSpeedReader();
+        return true;
+      }
+      return false;
+    },
   });
+
+  // First run on this tab — inject the script file (which auto-calls startSpeedReader)
+  if (!results[0]?.result) {
+    await browser.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["/build/speed-reader.js"],
+    });
+  }
 }
 
 browser.action.onClicked.addListener(runSpeedReader);
 
-browser.contextMenus.onClicked.addListener((info) => {
+browser.contextMenus.onClicked.addListener((info: any) => {
   if (info.menuItemId == "speed-reader") {
     runSpeedReader();
   }

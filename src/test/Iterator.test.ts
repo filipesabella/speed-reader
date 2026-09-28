@@ -53,4 +53,13 @@ describe('Iterator', () => {
     const result = iterator.reduceRemainder((acc, e) => acc + e, '');
     expect(result).to.equal('bc');
   });
+
+  it('has no current element before the first one', () => {
+    expect(iterator.current()).to.equal(undefined);
+  });
+
+  it('reduces over every element before the first one', () => {
+    const result = iterator.reduceRemainder((acc, e) => acc + e, '');
+    expect(result).to.equal('abc');
+  });
 });

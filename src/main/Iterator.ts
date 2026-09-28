@@ -6,7 +6,7 @@ export class Iterator<T> {
     this.index = -1;
   }
 
-  public current(): T {
+  public current(): T | undefined {
     return this.array[this.index];
   }
 
@@ -25,6 +25,6 @@ export class Iterator<T> {
   }
 
   public reduceRemainder<K>(fn: (acc: K, curr: T) => K, initialValue: K) {
-    return this.array.slice(this.index).reduce(fn, initialValue);
+    return this.array.slice(Math.max(0, this.index)).reduce(fn, initialValue);
   }
 }

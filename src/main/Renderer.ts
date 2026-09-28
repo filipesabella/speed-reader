@@ -8,170 +8,142 @@ import {
   splitWord,
 } from './words';
 
+export type Controls = {
+  togglePause: (pause?: boolean) => void,
+  changeSpeed: (delta: number) => void,
+  navigateWord: () => void,
+  close: () => void,
+};
+
 export class Renderer {
-  private container!: HTMLDivElement;
-  private wordStartEl!: HTMLDivElement;
-  private wordMiddleEl!: HTMLDivElement;
-  private wordEndEl!: HTMLDivElement;
-  private speedCurrentEl!: HTMLSpanElement;
-  private timeEl!: HTMLDivElement;
+  private host?: HTMLElement;
+  private unbindEvents?: () => void;
+  private wordStartEl!: HTMLElement;
+  private wordMiddleEl!: HTMLElement;
+  private wordEndEl!: HTMLElement;
+  private speedCurrentEl!: HTMLElement;
+  private timeEl!: HTMLElement;
 
   constructor(
     private readonly words: Iterator<string>,
     private readonly punctuationDelayMultiplier: number,
   ) {}
 
-  public initialize(
-    settings: Settings,
-    togglePause: (pause?: boolean) => void,
-    changeSpeed: (delta: number) => void,
-    navigateWord: () => void,
-  ): void {
-    this.removeUI();
+  public initialize(settings: Settings, controls: Controls): void {
+    this.close();
 
-    const styleEl = document.createElement('style');
-    styleEl.id = 'speed-reader-style';
-    styleEl.textContent = styles;
-    document.head.append(styleEl);
+    // a shadow root keeps the page's css away from the reader and vice versa
+    this.host = document.createElement('div');
+    this.host.id = 'speed-reader-host';
+    const root = this.host.attachShadow({ mode: 'open' });
+    root.innerHTML = templateStr;
+    const style = document.createElement('style');
+    style.textContent = styles;
+    root.prepend(style);
 
-    document.body.insertAdjacentHTML('beforeend', templateStr);
-
-    this.container = document.querySelector('#speed-reader-container')!;
-
-    this.container.style.setProperty('--bg-color', settings.backgroundColor);
-    this.container.style.setProperty('--text-color', settings.textColor);
-    this.container.style.setProperty(
+    const container = root.querySelector<HTMLElement>(
+      '#speed-reader-container',
+    )!;
+    container.style.setProperty('--bg-color', settings.backgroundColor);
+    container.style.setProperty('--text-color', settings.textColor);
+    container.style.setProperty(
       '--middle-letter-color',
       settings.middleLetterColor,
     );
-    this.container.style.setProperty('--font-family', settings.fontFamily);
-    this.container.style.setProperty('--font-size', settings.fontSize);
+    container.style.setProperty('--font-family', settings.fontFamily);
+    container.style.setProperty('--font-size', settings.fontSize);
 
-    const wrapper = this.container.querySelector(
-      '.speed-reader-wrapper',
-    ) as HTMLElement;
+    const wrapper = root.querySelector<HTMLElement>('.speed-reader-wrapper')!;
     wrapper.style.width = settings.fullScreen ? '100%' : settings.width;
     wrapper.style.height = settings.fullScreen ? '100%' : settings.height;
 
-    const wordContainer = this.container.querySelector(
+    const wordContainer = root.querySelector<HTMLElement>(
       '.speed-reader-word-container',
-    ) as HTMLElement;
+    )!;
     wordContainer.style.height = settings.fullScreen ? '90%' : 'auto';
-    this.wordStartEl = this.container.querySelector(
-      '.speed-reader-word-start',
-    )!;
-    this.wordMiddleEl = this.container.querySelector(
-      '.speed-reader-word-middle',
-    )!;
-    this.wordEndEl = this.container.querySelector('.speed-reader-word-end')!;
-    this.speedCurrentEl = this.container.querySelector(
-      '.speed-reader-speed-current',
-    )!;
-    this.timeEl = this.container.querySelector('.speed-reader-time')!;
 
-    this.bindEvents(
-      settings,
-      togglePause,
-      changeSpeed,
-      navigateWord,
-      document
-        .querySelector('#speed-reader-container .speed-reader-speed-minus')!,
-      document
-        .querySelector('#speed-reader-container .speed-reader-speed-plus')!,
-    );
+    this.wordStartEl = root.querySelector('.speed-reader-word-start')!;
+    this.wordMiddleEl = root.querySelector('.speed-reader-word-middle')!;
+    this.wordEndEl = root.querySelector('.speed-reader-word-end')!;
+    this.speedCurrentEl = root.querySelector('.speed-reader-speed-current')!;
+    this.timeEl = root.querySelector('.speed-reader-time')!;
+
+    // appended to <html> rather than <body> so that a transform on the body
+    // can't turn the fixed overlay into a positioned one
+    document.documentElement.append(this.host);
+
+    // otherwise a focused field on the page would still be receiving the
+    // keys meant for the reader
+    (document.activeElement as HTMLElement | null)?.blur?.();
+
+    this.unbindEvents = this.bindEvents(settings, controls, root);
   }
 
-  public render(word: string, wpm: number, interval: number): void {
-    const time = this.renderTime(interval);
-    const [start, middle, end] = splitWord(word);
+  public render(word: string | undefined, wpm: number, interval: number) {
+    const [start, middle, end] = splitWord(word ?? '');
 
     this.wordStartEl.textContent = start;
     this.wordMiddleEl.textContent = middle;
     this.wordEndEl.textContent = end;
     this.speedCurrentEl.textContent = wpm.toString();
-    this.timeEl.textContent = time;
-  }
-
-  private bindEvents(
-    settings: Settings,
-    togglePause: (pause?: boolean) => void,
-    changeSpeed: (delta: number) => void,
-    navigateWord: () => void,
-    speedMinusButton: HTMLDivElement,
-    speedPlusButton: HTMLDivElement,
-  ) {
-    this.container.addEventListener('click', (e: MouseEvent) => {
-      if ((e.target as HTMLDivElement).id === 'speed-reader-container') {
-        stopAndHide();
-      }
-    });
-
-    const eventHandlers = {
-      'press': {
-        'Space': togglePause,
-      },
-      'down': {
-        'ArrowLeft': () => {
-          this.words.previous();
-          navigateWord();
-        },
-        'ArrowRight': () => {
-          this.words.next();
-          navigateWord();
-        },
-        'ArrowUp': () => changeSpeed(settings.speedIncrement),
-        'ArrowDown': () => changeSpeed(-settings.speedIncrement),
-      },
-      'up': {
-        'Escape': () => stopAndHide(),
-      },
-    };
-
-    const handleEvent =
-      (type: 'press' | 'down' | 'up') => (e: KeyboardEvent) => {
-        const handler =
-          (eventHandlers[type] as { [key: string]: () => void })[e.code];
-        if (handler) {
-          e.preventDefault();
-          handler();
-        }
-      };
-
-    const onkeypress = handleEvent('press');
-    const onkeydown = handleEvent('down');
-    const onkeyup = handleEvent('up');
-
-    document.addEventListener('keypress', onkeypress);
-    document.addEventListener('keydown', onkeydown);
-    document.addEventListener('keyup', onkeyup);
-
-    speedMinusButton.addEventListener(
-      'click',
-      () => changeSpeed(-settings.speedIncrement),
-    );
-    speedPlusButton.addEventListener(
-      'click',
-      () => changeSpeed(settings.speedIncrement),
-    );
-
-    const stopAndHide = () => {
-      togglePause(true);
-      this.removeUI();
-
-      document.removeEventListener('keypress', onkeypress);
-      document.removeEventListener('keydown', onkeydown);
-      document.removeEventListener('keyup', onkeyup);
-    };
-  }
-
-  private renderTime(interval: number): string {
-    return formatTime(
+    this.timeEl.textContent = formatTime(
       remainingTime(interval, this.words, this.punctuationDelayMultiplier),
     );
   }
 
-  private removeUI(): void {
-    this.container?.remove();
-    document.getElementById('speed-reader-style')?.remove();
+  public close(): void {
+    this.unbindEvents?.();
+    this.unbindEvents = undefined;
+    this.host?.remove();
+    this.host = undefined;
+  }
+
+  private bindEvents(
+    settings: Settings,
+    { togglePause, changeSpeed, navigateWord, close }: Controls,
+    root: ShadowRoot,
+  ): () => void {
+    root.querySelector('#speed-reader-container')!
+      .addEventListener('click', e => {
+        if ((e.target as HTMLElement).id === 'speed-reader-container') close();
+      });
+
+    root.querySelector('.speed-reader-speed-minus')!
+      .addEventListener('click', () => changeSpeed(-settings.speedIncrement));
+    root.querySelector('.speed-reader-speed-plus')!
+      .addEventListener('click', () => changeSpeed(settings.speedIncrement));
+
+    const handlers: { [code: string]: () => void } = {
+      'Space': () => togglePause(),
+      'ArrowLeft': () => {
+        this.words.previous();
+        navigateWord();
+      },
+      'ArrowRight': () => {
+        this.words.next();
+        navigateWord();
+      },
+      'ArrowUp': () => changeSpeed(settings.speedIncrement),
+      'ArrowDown': () => changeSpeed(-settings.speedIncrement),
+      'Escape': close,
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      const handler = handlers[e.code];
+      // leave shortcuts like ctrl+arrow to the browser and the page
+      if (!handler || e.ctrlKey || e.altKey || e.metaKey) return;
+
+      // the reader is modal, so the page shouldn't also react to these keys
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      // holding an arrow keeps stepping, holding space shouldn't flicker
+      if (!e.repeat || e.code.startsWith('Arrow')) handler();
+    };
+
+    // capture phase, so the page can't swallow the keys before the reader
+    window.addEventListener('keydown', onKeyDown, true);
+
+    return () => window.removeEventListener('keydown', onKeyDown, true);
   }
 }

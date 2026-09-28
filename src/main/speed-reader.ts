@@ -34,18 +34,43 @@ const startSpeedReader = () => {
   if (!text.trim()) return;
 
   loadSettingsFromStorage().then(settings => {
+    // only one reader at a time, even if this script got injected twice
+    (window as any).stopSpeedReader?.();
+
     const words = textToWords(text, settings.wordAmount);
     const renderer = new Renderer(words, settings.punctuationDelayMultiplier);
 
     let speedInWPM = settings.initialSpeed;
     let interval = 60 * 1000 / settings.initialSpeed;
     let paused = false;
+    let timer: number | undefined;
     const wakeLock = createWakeLock();
 
-    const changeSpeed = (delta: number) => {
-      speedInWPM += delta;
-      speedInWPM = Math.max(minimumSpeed, speedInWPM);
+    const schedule = (timeout: number) => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(loop, timeout);
+    };
 
+    const loop = () => {
+      if (words.ended() || paused) {
+        wakeLock.drop();
+        return;
+      }
+
+      const nextWord = words.next();
+      renderer.render(nextWord, speedInWPM, interval);
+
+      schedule(
+        timeoutForWord(
+          interval,
+          nextWord,
+          settings.punctuationDelayMultiplier,
+        ),
+      );
+    };
+
+    const changeSpeed = (delta: number) => {
+      speedInWPM = Math.max(minimumSpeed, speedInWPM + delta);
       interval = 60 * 1000 / speedInWPM;
 
       renderer.render(words.current(), speedInWPM, interval);
@@ -57,6 +82,7 @@ const startSpeedReader = () => {
 
     const togglePause = (pause?: boolean) => {
       paused = pause !== undefined ? pause : !paused;
+      window.clearTimeout(timer);
 
       if (paused) {
         wakeLock.drop();
@@ -66,29 +92,26 @@ const startSpeedReader = () => {
       }
     };
 
-    wakeLock.take();
-    renderer.initialize(settings, togglePause, changeSpeed, navigateWord);
-
-    const loop = () => {
-      if (words.ended() || paused) {
-        wakeLock.drop();
-        return;
+    const close = () => {
+      togglePause(true);
+      renderer.close();
+      if ((window as any).stopSpeedReader === close) {
+        (window as any).stopSpeedReader = undefined;
       }
-
-      const nextWord = words.next();
-      renderer.render(nextWord, speedInWPM, interval);
-
-      window.setTimeout(
-        loop,
-        timeoutForWord(
-          interval,
-          nextWord,
-          settings.punctuationDelayMultiplier,
-        ),
-      );
     };
 
-    window.setTimeout(loop, interval);
+    (window as any).stopSpeedReader = close;
+
+    wakeLock.take();
+    renderer.initialize(settings, {
+      togglePause,
+      changeSpeed,
+      navigateWord,
+      close,
+    });
+    renderer.render(words.current(), speedInWPM, interval);
+
+    schedule(interval);
   });
 };
 

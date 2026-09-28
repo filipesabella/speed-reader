@@ -2,7 +2,11 @@ import { Iterator } from './Iterator';
 import { Settings } from './Settings';
 import styles from './styles.css?raw';
 import templateStr from './template.html?raw';
-import { remainingTime } from './words';
+import {
+  formatTime,
+  remainingTime,
+  splitWord,
+} from './words';
 
 export class Renderer {
   private container!: HTMLDivElement;
@@ -79,7 +83,7 @@ export class Renderer {
 
   public render(word: string, wpm: number, interval: number): void {
     const time = this.renderTime(interval);
-    const [start, middle, end] = this.renderWords(word);
+    const [start, middle, end] = splitWord(word);
 
     this.wordStartEl.textContent = start;
     this.wordMiddleEl.textContent = middle;
@@ -160,34 +164,10 @@ export class Renderer {
     };
   }
 
-  private renderWords(word: string): [string, string, string] {
-    let middleIndex = Math.floor(word.length / 2);
-
-    // if the word ends in a punctuation mark, move the middle one character
-    // back. it looks better.
-    if (!!word.match(/[^a-zA-Z0-9]\n?/)) middleIndex--;
-
-    if (word.charAt(middleIndex) === ' ') middleIndex--;
-
-    return [
-      word.substring(0, middleIndex),
-      word.charAt(middleIndex),
-      word.substring(middleIndex + 1),
-    ];
-  }
-
   private renderTime(interval: number): string {
-    const seconds = remainingTime(
-      interval,
-      this.words,
-      this.punctuationDelayMultiplier,
-    ) / 1000;
-
-    const readableTime = Math.floor(seconds / 60)
-      + ':'
-      + ('0' + Math.ceil(seconds % 60)).slice(-2);
-
-    return readableTime;
+    return formatTime(
+      remainingTime(interval, this.words, this.punctuationDelayMultiplier),
+    );
   }
 
   private removeUI(): void {

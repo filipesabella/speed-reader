@@ -6,7 +6,9 @@ import {
 import { Iterator } from '../main/Iterator';
 import { defaultSettings } from '../main/Settings';
 import {
+  formatTime,
   remainingTime,
+  splitWord,
   textToWords,
   timeoutForWord,
 } from '../main/words';
@@ -122,6 +124,43 @@ describe('words tests', () => {
       expect(words.next()).to.equal('followed by');
       expect(words.next()).to.equal('line break\n');
       expect(words.ended()).to.be.true;
+    });
+  });
+
+  describe('splitWord', () => {
+    it('splits around the middle letter', () => {
+      expect(splitWord('hello')).to.deep.equal(['he', 'l', 'lo']);
+      expect(splitWord('word')).to.deep.equal(['wo', 'r', 'd']);
+    });
+
+    it('moves the middle back for words ending in punctuation', () => {
+      expect(splitWord('hello.')).to.deep.equal(['he', 'l', 'lo.']);
+      expect(splitWord('hello\n')).to.deep.equal(['he', 'l', 'lo\n']);
+    });
+
+    it('ignores punctuation that is not at the end', () => {
+      expect(splitWord('don\'t')).to.deep.equal(['do', 'n', '\'t']);
+      expect(splitWord('café')).to.deep.equal(['ca', 'f', 'é']);
+      expect(splitWord('мир')).to.deep.equal(['м', 'и', 'р']);
+    });
+
+    it('never lands on a space in a batch of words', () => {
+      expect(splitWord('ab cd')).to.deep.equal(['a', 'b', ' cd']);
+    });
+
+    it('handles empty and single character words', () => {
+      expect(splitWord('')).to.deep.equal(['', '', '']);
+      expect(splitWord('.')).to.deep.equal(['', '.', '']);
+    });
+  });
+
+  describe('formatTime', () => {
+    it('formats minutes and seconds, rounding up', () => {
+      expect(formatTime(0)).to.equal('0:00');
+      expect(formatTime(1_500)).to.equal('0:02');
+      expect(formatTime(59_500)).to.equal('1:00');
+      expect(formatTime(119_400)).to.equal('2:00');
+      expect(formatTime(125_000)).to.equal('2:05');
     });
   });
 });

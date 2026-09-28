@@ -67,3 +67,29 @@ export function timeoutForWord(
 
   return interval * intervalMultiplier;
 }
+
+// splits a word around the letter the eye should focus on
+export function splitWord(word: string): [string, string, string] {
+  // if the word ends in a punctuation mark, move the middle one character
+  // back. it looks better.
+  const endsInPunctuation = /[^\p{L}\p{N}]\n?$/u.test(word);
+  const middle = Math.max(
+    0,
+    Math.floor(word.length / 2) - (endsInPunctuation ? 1 : 0),
+  );
+  const middleIndex = word.charAt(middle) === ' ' ? middle - 1 : middle;
+
+  return [
+    word.substring(0, middleIndex),
+    word.charAt(middleIndex),
+    word.substring(middleIndex + 1),
+  ];
+}
+
+export function formatTime(milliseconds: number): string {
+  const seconds = Math.ceil(milliseconds / 1000);
+
+  return Math.floor(seconds / 60)
+    + ':'
+    + String(seconds % 60).padStart(2, '0');
+}

@@ -1,6 +1,7 @@
 import {
   defaultSettings,
   loadSettingsFromStorage,
+  sanitiseSettings,
   saveSettingsInStorage,
   Settings,
 } from '../main/Settings';
@@ -84,6 +85,6 @@ import {
       }
     });
 
-    return settings;
+    return sanitiseSettings(settings);
   }
 })();

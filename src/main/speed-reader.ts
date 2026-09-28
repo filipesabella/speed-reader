@@ -1,6 +1,9 @@
 import { articleText } from './article';
 import { Renderer } from './Renderer';
-import { loadSettingsFromStorage } from './Settings';
+import {
+  loadSettingsFromStorage,
+  minimumSpeed,
+} from './Settings';
 import {
   textToWords,
   timeoutForWord,
@@ -41,7 +44,7 @@ const startSpeedReader = () => {
 
     const changeSpeed = (delta: number) => {
       speedInWPM += delta;
-      speedInWPM = Math.max(50, speedInWPM);
+      speedInWPM = Math.max(minimumSpeed, speedInWPM);
 
       interval = 60 * 1000 / speedInWPM;
 

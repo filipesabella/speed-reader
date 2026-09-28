@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
 import { Iterator } from '../main/Iterator';
 import { remainingTime, textToWords, timeoutForWord } from '../main/words';
 import { defaultSettings } from '../main/Settings';

@@ -1,8 +1,8 @@
 import { Iterator } from './Iterator';
 import { Settings } from './Settings';
 import { remainingTime } from './words';
-import templateStr from 'bundle-text:./template.html';
-import * as styles from 'bundle-text:./styles.css';
+import templateStr from './template.html?raw';
+import styles from './styles.css?raw';
 
 export class Renderer {
   private container!: HTMLDivElement;
@@ -25,7 +25,7 @@ export class Renderer {
 
     const styleEl = document.createElement('style');
     styleEl.id = 'speed-reader-style';
-    styleEl.textContent = (styles as any).default;
+    styleEl.textContent = styles;
     document.head.append(styleEl);
 
     document.body.insertAdjacentHTML('beforeend', templateStr);

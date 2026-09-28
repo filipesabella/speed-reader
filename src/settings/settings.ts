@@ -73,8 +73,9 @@ import {
       if (e.type === 'checkbox') {
         (settings as any)[attribute] = e.checked;
       } else if (e.type === 'number') {
+        const value = parseFloat(e.value);
         (settings as any)[attribute] =
-          parseInt(e.value) || defaultSettings.speedIncrement;
+          Number.isFinite(value) ? value : defaultSettings[attribute];
       } else {
         (settings as any)[attribute] = e.value;
       }

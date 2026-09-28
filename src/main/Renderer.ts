@@ -12,7 +12,9 @@ export class Renderer {
   private speedCurrentEl!: HTMLSpanElement;
   private timeEl!: HTMLDivElement;
 
-  constructor(private readonly words: Iterator<string>) { }
+  constructor(
+    private readonly words: Iterator<string>,
+    private readonly punctuationDelayMultiplier: number) { }
 
   public initialize(
     settings: Settings,
@@ -153,7 +155,8 @@ export class Renderer {
   }
 
   private renderTime(interval: number): string {
-    const seconds = remainingTime(interval, this.words) / 1000;
+    const seconds = remainingTime(
+      interval, this.words, this.punctuationDelayMultiplier) / 1000;
 
     const readableTime = Math.floor(seconds / 60)
       + ':'

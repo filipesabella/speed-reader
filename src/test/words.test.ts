@@ -4,27 +4,39 @@ import { remainingTime, textToWords, timeoutForWord } from '../main/words';
 import { defaultSettings } from '../main/Settings';
 
 const interval = 100;
-const newInterval = interval * defaultSettings.punctuationDelayMultiplier;
+const multiplier = defaultSettings.punctuationDelayMultiplier;
+const newInterval = interval * multiplier;
 
 describe('words tests', () => {
   describe('timeoutForWord', () => {
     it('returns a bigger timeout for words ending in \\n', () => {
-      const timeout = timeoutForWord(interval, 'hello\n');
+      const timeout = timeoutForWord(interval, 'hello\n', multiplier);
       expect(timeout).to.equal(300);
     });
 
     it('returns a bigger timeout for words ending in stop symbols', () => {
-      expect(timeoutForWord(interval, 'hello.')).to.equal(newInterval);
-      expect(timeoutForWord(interval, 'hello,')).to.equal(newInterval);
-      expect(timeoutForWord(interval, 'hello?')).to.equal(newInterval);
-      expect(timeoutForWord(interval, 'hello!')).to.equal(newInterval);
-      expect(timeoutForWord(interval, 'hello:')).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello.', multiplier)).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello,', multiplier)).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello?', multiplier)).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello!', multiplier)).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello:', multiplier)).to.equal(newInterval);
     });
 
     it('returns interval as timeout for other words', () => {
-      expect(timeoutForWord(interval, 'hello')).to.equal(100);
-      expect(timeoutForWord(interval, 'hello ')).to.equal(100);
-      expect(timeoutForWord(interval, 'hello_')).to.equal(100);
+      expect(timeoutForWord(interval, 'hello', multiplier)).to.equal(100);
+      expect(timeoutForWord(interval, 'hello ', multiplier)).to.equal(100);
+      expect(timeoutForWord(interval, 'hello_', multiplier)).to.equal(100);
+    });
+
+    it('uses the given punctuation multiplier', () => {
+      expect(timeoutForWord(interval, 'hello.', 4)).to.equal(400);
+      expect(timeoutForWord(interval, 'hello\n', 4)).to.equal(700);
+    });
+
+    it('disables the pauses with a multiplier of 1 or less', () => {
+      expect(timeoutForWord(interval, 'hello.', 1)).to.equal(100);
+      expect(timeoutForWord(interval, 'hello\n', 1)).to.equal(100);
+      expect(timeoutForWord(interval, 'hello.', 0)).to.equal(100);
     });
   });
 
@@ -37,7 +49,7 @@ describe('words tests', () => {
       ]);
       words.next();
 
-      const time = remainingTime(interval, words);
+      const time = remainingTime(interval, words, multiplier);
       expect(time).to.equal(interval * 4 + interval * defaultSettings.punctuationDelayMultiplier);
     })
   });

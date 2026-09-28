@@ -1,4 +1,7 @@
-import { defaultSettings, Settings } from "./src/main/Settings";
+import {
+  defaultSettings,
+  Settings,
+} from './src/main/Settings';
 
 declare global {
   interface Window {
@@ -10,9 +13,9 @@ const browser = (globalThis as any).browser || (globalThis as any).chrome;
 
 browser.runtime.onInstalled.addListener(() => {
   browser.contextMenus.create({
-    id: "speed-reader",
-    title: "Speed Reader",
-    contexts: ["selection"],
+    id: 'speed-reader',
+    title: 'Speed Reader',
+    contexts: ['selection'],
   });
 });
 
@@ -20,10 +23,10 @@ async function runSpeedReader(): Promise<void> {
   const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id) return;
 
-  const settings = await browser.storage.sync.get("speed-reader-settings");
+  const settings = await browser.storage.sync.get('speed-reader-settings');
   const finalSettings: Settings = {
     ...defaultSettings,
-    ...(settings["speed-reader-settings"] || {}),
+    ...(settings['speed-reader-settings'] || {}),
   };
 
   // Inject settings into the page
@@ -51,7 +54,7 @@ async function runSpeedReader(): Promise<void> {
   if (!results[0]?.result) {
     await browser.scripting.executeScript({
       target: { tabId: tab.id },
-      files: ["/build/speed-reader.js"],
+      files: ['/build/speed-reader.js'],
     });
   }
 }
@@ -59,7 +62,7 @@ async function runSpeedReader(): Promise<void> {
 browser.action.onClicked.addListener(runSpeedReader);
 
 browser.contextMenus.onClicked.addListener((info: any) => {
-  if (info.menuItemId == "speed-reader") {
+  if (info.menuItemId == 'speed-reader') {
     runSpeedReader();
   }
 });

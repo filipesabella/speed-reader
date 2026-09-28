@@ -1,6 +1,9 @@
 import { Renderer } from './Renderer';
 import { loadSettingsFromStorage } from './Settings';
-import { textToWords, timeoutForWord } from './words';
+import {
+  textToWords,
+  timeoutForWord,
+} from './words';
 
 // keeps the screen on while reading. drop() before the request resolves still
 // releases the lock once it arrives.
@@ -40,11 +43,11 @@ const startSpeedReader = () => {
       interval = 60 * 1000 / speedInWPM;
 
       renderer.render(words.current(), speedInWPM, interval);
-    }
+    };
 
     const navigateWord = () => {
       renderer.render(words.current(), speedInWPM, interval);
-    }
+    };
 
     const togglePause = (pause?: boolean) => {
       paused = pause !== undefined ? pause : !paused;
@@ -55,7 +58,7 @@ const startSpeedReader = () => {
         wakeLock.take();
         loop();
       }
-    }
+    };
 
     wakeLock.take();
     renderer.initialize(settings, togglePause, changeSpeed, navigateWord);
@@ -69,8 +72,14 @@ const startSpeedReader = () => {
       const nextWord = words.next();
       renderer.render(nextWord, speedInWPM, interval);
 
-      window.setTimeout(loop, timeoutForWord(
-        interval, nextWord, settings.punctuationDelayMultiplier));
+      window.setTimeout(
+        loop,
+        timeoutForWord(
+          interval,
+          nextWord,
+          settings.punctuationDelayMultiplier,
+        ),
+      );
     };
 
     window.setTimeout(loop, interval);

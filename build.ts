@@ -1,4 +1,7 @@
-import { build, type InlineConfig } from 'vite';
+import {
+  build,
+  type InlineConfig,
+} from 'vite';
 
 const outDir = 'build';
 
@@ -19,7 +22,8 @@ const settingsPage: InlineConfig = {
 const classicScript = (
   entry: string,
   name: string,
-  fileName: string): InlineConfig => ({
+  fileName: string,
+): InlineConfig => ({
   configFile: false,
   build: {
     outDir,

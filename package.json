@@ -12,10 +12,12 @@
     "start-settings": "vite --open /src/settings/settings.html",
     "test": "vitest run",
     "build": "yarn test && node build.ts",
-    "package": "rm -rf build && yarn build && zip -r extension.zip build icons manifest.json"
+    "package": "rm -rf build && yarn build && zip -r extension.zip build icons manifest.json",
+    "fmt": "dprint fmt"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "dprint": "^0.57.1",
     "less": "^4.2.2",
     "typescript": "^6.0.3",
     "vite": "^8.3.1",

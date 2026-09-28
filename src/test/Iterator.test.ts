@@ -1,5 +1,10 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { Iterator } from "../main/Iterator";
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest';
+import { Iterator } from '../main/Iterator';
 
 describe('Iterator', () => {
   let iterator = new Iterator(['a', 'b', 'c']);
@@ -47,5 +52,5 @@ describe('Iterator', () => {
 
     const result = iterator.reduceRemainder((acc, e) => acc + e, '');
     expect(result).to.equal('bc');
-  })
+  });
 });

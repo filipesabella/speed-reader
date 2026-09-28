@@ -1,7 +1,15 @@
-import { describe, expect, it } from 'vitest';
+import {
+  describe,
+  expect,
+  it,
+} from 'vitest';
 import { Iterator } from '../main/Iterator';
-import { remainingTime, textToWords, timeoutForWord } from '../main/words';
 import { defaultSettings } from '../main/Settings';
+import {
+  remainingTime,
+  textToWords,
+  timeoutForWord,
+} from '../main/words';
 
 const interval = 100;
 const multiplier = defaultSettings.punctuationDelayMultiplier;
@@ -15,11 +23,21 @@ describe('words tests', () => {
     });
 
     it('returns a bigger timeout for words ending in stop symbols', () => {
-      expect(timeoutForWord(interval, 'hello.', multiplier)).to.equal(newInterval);
-      expect(timeoutForWord(interval, 'hello,', multiplier)).to.equal(newInterval);
-      expect(timeoutForWord(interval, 'hello?', multiplier)).to.equal(newInterval);
-      expect(timeoutForWord(interval, 'hello!', multiplier)).to.equal(newInterval);
-      expect(timeoutForWord(interval, 'hello:', multiplier)).to.equal(newInterval);
+      expect(timeoutForWord(interval, 'hello.', multiplier)).to.equal(
+        newInterval,
+      );
+      expect(timeoutForWord(interval, 'hello,', multiplier)).to.equal(
+        newInterval,
+      );
+      expect(timeoutForWord(interval, 'hello?', multiplier)).to.equal(
+        newInterval,
+      );
+      expect(timeoutForWord(interval, 'hello!', multiplier)).to.equal(
+        newInterval,
+      );
+      expect(timeoutForWord(interval, 'hello:', multiplier)).to.equal(
+        newInterval,
+      );
     });
 
     it('returns interval as timeout for other words', () => {
@@ -43,15 +61,17 @@ describe('words tests', () => {
   describe('remainingTime', () => {
     it('returns the remaining time for an iterator of words', () => {
       const words = new Iterator([
-        'hello',     // interval
-        'there!',    // interval * punctuationDelayMultiplier
-        'friend\n',  // interval * 3
+        'hello', // interval
+        'there!', // interval * punctuationDelayMultiplier
+        'friend\n', // interval * 3
       ]);
       words.next();
 
       const time = remainingTime(interval, words, multiplier);
-      expect(time).to.equal(interval * 4 + interval * defaultSettings.punctuationDelayMultiplier);
-    })
+      expect(time).to.equal(
+        interval * 4 + interval * defaultSettings.punctuationDelayMultiplier,
+      );
+    });
   });
 
   describe('textToWords', () => {
@@ -103,6 +123,5 @@ describe('words tests', () => {
       expect(words.next()).to.equal('line break\n');
       expect(words.ended()).to.be.true;
     });
-
   });
 });

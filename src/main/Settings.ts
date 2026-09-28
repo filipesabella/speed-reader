@@ -2,18 +2,18 @@
 const SETTINGS_KEY = 'speed-reader-settings';
 
 export type Settings = {
-  fontFamily: string;
-  backgroundColor: string;
-  textColor: string;
-  middleLetterColor: string;
-  fontSize: string;
-  fullScreen: boolean;
-  width: string;
-  height: string;
-  speedIncrement: number;
-  initialSpeed: number;
-  punctuationDelayMultiplier: number;
-  wordAmount: number;
+  fontFamily: string,
+  backgroundColor: string,
+  textColor: string,
+  middleLetterColor: string,
+  fontSize: string,
+  fullScreen: boolean,
+  width: string,
+  height: string,
+  speedIncrement: number,
+  initialSpeed: number,
+  punctuationDelayMultiplier: number,
+  wordAmount: number,
 };
 
 export const defaultSettings = {
@@ -37,19 +37,19 @@ export async function loadSettingsFromStorage(): Promise<Settings> {
     if ((window as any).speedReaderSettings) {
       return {
         ...defaultSettings,
-        ...(window as any).speedReaderSettings
+        ...(window as any).speedReaderSettings,
       };
     } else if (isExtensionContext()) { // when running the options page
       const value = await (window as any).browser.storage.sync
         .get({ [SETTINGS_KEY]: defaultSettings });
       return {
         ...defaultSettings,
-        ...value[SETTINGS_KEY]
+        ...value[SETTINGS_KEY],
       };
     } else { // when just running locally for testing
       return {
         ...defaultSettings,
-        ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')
+        ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'),
       };
     }
   } catch (e) {
@@ -58,8 +58,9 @@ export async function loadSettingsFromStorage(): Promise<Settings> {
   }
 }
 
-export async function saveSettingsInStorage(settings: Settings)
-  : Promise<Settings> {
+export async function saveSettingsInStorage(
+  settings: Settings,
+): Promise<Settings> {
   if (isExtensionContext()) {
     await (window as any).browser.storage.sync.set({
       [SETTINGS_KEY]: settings,

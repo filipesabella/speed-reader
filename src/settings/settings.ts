@@ -2,8 +2,8 @@ import {
   defaultSettings,
   loadSettingsFromStorage,
   saveSettingsInStorage,
-  Settings
-} from "../main/Settings";
+  Settings,
+} from '../main/Settings';
 
 (function() {
   document.body.onload = () => {
@@ -40,7 +40,7 @@ import {
 
       renderPreview(settings);
     });
-  }
+  };
 
   function handleFullScreen(container: HTMLElement): void {
     const checked = container
@@ -58,8 +58,10 @@ import {
     container.style.setProperty('--font-family', settings.fontFamily);
     container.style.setProperty('--font-size', settings.fontSize);
     container.style.setProperty('--text-color', settings.textColor);
-    container.style.setProperty('--middle-letter-color',
-      settings.middleLetterColor);
+    container.style.setProperty(
+      '--middle-letter-color',
+      settings.middleLetterColor,
+    );
     container.style.setProperty('--width', settings.width);
     container.style.setProperty('--height', settings.height);
   }
@@ -74,8 +76,9 @@ import {
         (settings as any)[attribute] = e.checked;
       } else if (e.type === 'number') {
         const value = parseFloat(e.value);
-        (settings as any)[attribute] =
-          Number.isFinite(value) ? value : defaultSettings[attribute];
+        (settings as any)[attribute] = Number.isFinite(value)
+          ? value
+          : defaultSettings[attribute];
       } else {
         (settings as any)[attribute] = e.value;
       }
@@ -83,6 +86,4 @@ import {
 
     return settings;
   }
-
 })();
-
